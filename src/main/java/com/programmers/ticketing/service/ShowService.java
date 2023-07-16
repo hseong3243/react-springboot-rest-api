@@ -23,8 +23,8 @@ public class ShowService {
     }
 
     @Transactional
-    public Long registerShow(String title, ShowType showType, LocalTime playTime) {
-        Show show = new Show(title, showType, playTime);
+    public Long registerShow(String title, ShowType showType, LocalTime playTime, String description) {
+        Show show = new Show(title, showType, playTime, description);
         showRepository.save(show);
         return show.getShowId();
     }

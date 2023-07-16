@@ -41,9 +41,10 @@ class ShowServiceTest {
         String title = "title";
         ShowType showType = ShowType.valueOf("MUSICAL");
         LocalTime playtime = LocalTime.of(2, 30, 0);
+        String description = "";
 
         //when
-        showService.registerShow(title, showType, playtime);
+        showService.registerShow(title, showType, playtime, description);
 
         //then
         then(showRepository).should().save(any());
@@ -56,7 +57,8 @@ class ShowServiceTest {
         String title = "title";
         ShowType showType = ShowType.CONCERT;
         LocalTime playtime = LocalTime.of(2, 30);
-        Show show = new Show(title, showType, playtime);
+        String description = "";
+        Show show = new Show(title, showType, playtime, description);
 
         given(showRepository.findById(any())).willReturn(Optional.of(show));
 
@@ -85,8 +87,8 @@ class ShowServiceTest {
     @DisplayName("성공: show 목록 조회 기능")
     void findShows() {
         //given
-        Show showA = new Show("titleA", ShowType.CONCERT, LocalTime.of(2, 30));
-        Show showB = new Show("titleB", ShowType.CONCERT, LocalTime.of(2, 30));
+        Show showA = new Show("titleA", ShowType.CONCERT, LocalTime.of(2, 30), "");
+        Show showB = new Show("titleB", ShowType.CONCERT, LocalTime.of(2, 30), "");
         List<Show> shows = List.of(showA, showB);
 
         given(showRepository.findAll()).willReturn(shows);

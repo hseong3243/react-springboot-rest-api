@@ -23,13 +23,16 @@ public class Show {
     @Column(nullable = false)
     private LocalTime playtime;
 
+    private String description;
+
     public Show() {
 
     }
 
-    public Show(String title, ShowType showType, LocalTime playTime) {
+    public Show(String title, ShowType showType, LocalTime playtime, String description) {
         this.title = title;
-        this.playtime = playTime;
         this.showType = showType;
+        this.playtime = playtime;
+        this.description = description;
     }
 }
