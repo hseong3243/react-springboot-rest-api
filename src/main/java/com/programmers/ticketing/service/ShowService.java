@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -33,5 +34,12 @@ public class ShowService {
                     return new NoSuchElementException("No such Show exist");
                 });
         return ShowDto.from(show);
+    }
+
+    public List<ShowDto> findShows() {
+        List<Show> shows = showRepository.findAll();
+        return shows.stream()
+                .map(ShowDto::from)
+                .toList();
     }
 }

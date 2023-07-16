@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -78,5 +79,25 @@ class ShowServiceTest {
         //then
         assertThatThrownBy(() -> showService.findShow(1L))
                 .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("성공: show 목록 조회 기능")
+    void findShows() {
+        //given
+        Show showA = new Show("titleA", ShowType.CONCERT, LocalTime.of(2, 30));
+        Show showB = new Show("titleB", ShowType.CONCERT, LocalTime.of(2, 30));
+        List<Show> shows = List.of(showA, showB);
+
+        given(showRepository.findAll()).willReturn(shows);
+
+        //when
+        List<ShowDto> result = showService.findShows();
+
+        //then
+        ShowDto showDtoA = ShowDto.from(showA);
+        ShowDto showDtoB = ShowDto.from(showB);
+        assertThat(result).usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(showDtoA, showDtoB);
     }
 }
