@@ -6,6 +6,7 @@ import com.programmers.ticketing.dto.ShowDto;
 import com.programmers.ticketing.repository.ShowRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -21,12 +22,14 @@ public class ShowService {
         this.showRepository = showRepository;
     }
 
+    @Transactional
     public Long registerShow(String title, ShowType showType, LocalTime playTime) {
         Show show = new Show(title, showType, playTime);
         showRepository.save(show);
         return show.getShowId();
     }
 
+    @Transactional(readOnly = true)
     public ShowDto findShow(Long showId) {
         Show show = showRepository.findById(showId)
                 .orElseThrow(() -> {
@@ -36,6 +39,7 @@ public class ShowService {
         return ShowDto.from(show);
     }
 
+    @Transactional(readOnly = true)
     public List<ShowDto> findShows() {
         List<Show> shows = showRepository.findAll();
         return shows.stream()
