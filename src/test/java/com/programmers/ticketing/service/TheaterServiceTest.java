@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -113,5 +114,25 @@ class TheaterServiceTest {
         //then
         assertThat(theaterDto.getName()).isEqualTo(theater.getName());
         assertThat(theaterDto.getAddress()).isEqualTo(theater.getAddress());
+    }
+
+    @Test
+    @DisplayName("성공: theater 목록 조회 기능")
+    void findTheaters() {
+        //given
+        Theater theaterA = new Theater("theaterA", "address");
+        Theater theaterB = new Theater("theaterB", "address");
+        List<Theater> theaters = List.of(theaterA, theaterB);
+
+        given(theaterRepository.findAll()).willReturn(theaters);
+
+        //when
+        List<TheaterDto> theaterDtos = theaterService.findTheaters();
+
+        //then
+        TheaterDto theaterDtoA = TheaterDto.from(theaterA);
+        TheaterDto theaterDtoB = TheaterDto.from(theaterB);
+        assertThat(theaterDtos).usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(theaterDtoA, theaterDtoB);
     }
 }

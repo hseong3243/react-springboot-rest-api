@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -33,5 +34,13 @@ public class TheaterService {
                     return new NoSuchElementException("No such Theater exist");
                 });
         return TheaterDto.from(theater);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TheaterDto> findTheaters() {
+        List<Theater> theaters = theaterRepository.findAll();
+        return theaters.stream()
+                .map(TheaterDto::from)
+                .toList();
     }
 }
