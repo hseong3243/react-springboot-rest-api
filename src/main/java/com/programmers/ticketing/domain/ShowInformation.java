@@ -48,7 +48,7 @@ public class ShowInformation {
     }
 
     private void nullCheck(LocalDateTime startTime) {
-        if(startTime == null) {
+        if (startTime == null) {
             throw new IllegalArgumentException("Show information start time must not be null");
         }
     }
@@ -56,6 +56,16 @@ public class ShowInformation {
     private void validateStartTime(LocalDateTime startTime) {
         if (startTime.isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("Show information start time must be after now");
+        }
+    }
+
+    public void update(ShowStatus showStatus, LocalDateTime startTime) {
+        if (showStatus != null) {
+            this.showStatus = showStatus;
+        }
+        if (startTime != null) {
+            validateStartTime(startTime);
+            this.startTime = startTime;
         }
     }
 }

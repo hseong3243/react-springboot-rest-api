@@ -2,6 +2,7 @@ package com.programmers.ticketing.service;
 
 import com.programmers.ticketing.domain.Show;
 import com.programmers.ticketing.domain.ShowInformation;
+import com.programmers.ticketing.domain.ShowStatus;
 import com.programmers.ticketing.domain.Theater;
 import com.programmers.ticketing.repository.ShowInformationRepository;
 import com.programmers.ticketing.repository.ShowRepository;
@@ -65,5 +66,15 @@ public class ShowInformationService {
         return showInformations.stream()
                 .map(ShowInformationDto::from)
                 .toList();
+    }
+
+    @Transactional
+    public void updateShowInformation(Long showInformationId, ShowStatus showStatus, LocalDateTime startTime) {
+        ShowInformation showInformation = showInformationRepository.findById(showInformationId)
+                .orElseThrow(() -> {
+                    log.warn("No such show information - ShowInformationId: {}", showInformationId);
+                    return new NoSuchElementException("No such show information");
+                });
+        showInformation.update(showStatus, startTime);
     }
 }
