@@ -53,4 +53,14 @@ public class TheaterService {
                 });
         theater.update(name, address);
     }
+
+    @Transactional
+    public void deleteTheater(Long theaterId) {
+        Theater theater = theaterRepository.findById(theaterId)
+                .orElseThrow(() -> {
+                    log.warn("No such theater exist - TheaterId: {}", theaterId);
+                    return new NoSuchElementException("No such Theater exist");
+                });
+        theaterRepository.delete(theater);
+    }
 }

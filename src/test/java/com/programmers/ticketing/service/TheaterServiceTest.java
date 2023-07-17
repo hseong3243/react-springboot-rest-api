@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -184,5 +185,32 @@ class TheaterServiceTest {
         //then
         assertThatThrownBy(() -> theaterService.updateTheater(1L, null, updatedAddress))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("성공: theater 단건 삭제 기능")
+    void deleteTheater() {
+        //given
+        Theater theater = new Theater("theater", "address");
+
+        given(theaterRepository.findById(any())).willReturn(Optional.of(theater));
+
+        //when
+        theaterService.deleteTheater(1L);
+
+        //then
+        then(theaterRepository).should().delete(any());
+    }
+
+    @Test
+    @DisplayName("예외 theater 단건 삭제 기능 - 존재하지 않는 theater")
+    void deleteTheater_ButNoSuchTheater_Then_Exception() {
+        //given
+        given(theaterRepository.findById(any())).willThrow(NoSuchElementException.class);
+
+        //when
+        //then
+        assertThatThrownBy(() -> theaterService.deleteTheater(any()))
+                .isInstanceOf(NoSuchElementException.class);
     }
 }
