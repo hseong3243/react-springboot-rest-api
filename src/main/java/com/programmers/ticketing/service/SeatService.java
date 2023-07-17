@@ -62,4 +62,14 @@ public class SeatService {
                 .map(SeatDto::from)
                 .toList();
     }
+
+    @Transactional
+    public void deleteSeat(Long seatId) {
+        Seat seat = seatRepository.findById(seatId)
+                .orElseThrow(() -> {
+                    log.warn("No such seat exist - SeatId: {}", seatId);
+                    return new NoSuchElementException("No such seat exist");
+                });
+        seatRepository.delete(seat);
+    }
 }

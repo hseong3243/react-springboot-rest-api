@@ -139,4 +139,31 @@ class SeatServiceTest {
         assertThat(seatDtos).usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(seatDtoA, seatDtoB, seatDtoC);
     }
+
+    @Test
+    @DisplayName("성공: seat 단건 삭제 기능")
+    void deleteSeat() {
+        //given
+        Seat seat = createSeat("theater", 1);
+
+        given(seatRepository.findById(any())).willReturn(Optional.of(seat));
+
+        //when
+        seatService.deleteSeat(any());
+
+        //then
+        then(seatRepository).should().delete(any());
+    }
+
+    @Test
+    @DisplayName("예외: seat 단건 삭제 기능 - 존재하지 않는 seat")
+    void deleteSeat_ButNoSuchElement_Then_Exception() {
+        //given
+        given(seatRepository.findById(any())).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> seatService.deleteSeat(1L))
+                .isInstanceOf(NoSuchElementException.class);
+    }
 }
