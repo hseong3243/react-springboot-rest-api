@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -49,6 +50,22 @@ class ShowServiceTest {
 
         //then
         then(showRepository).should().save(any());
+    }
+
+    @Test
+    @DisplayName("예외: show 등록 기능 - 범위를 넘은 description")
+    void registerShow_ButDescriptionOutOfRange_Then_Exception() {
+        //given
+        String title = "title";
+        ShowType showType = ShowType.valueOf("MUSICAL");
+        LocalTime playtime = LocalTime.of(2, 30, 0);
+
+        //when
+        String description = "a".repeat(1001);
+
+        //then
+        assertThatThrownBy(() -> showService.registerShow(title, showType, playtime, description))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

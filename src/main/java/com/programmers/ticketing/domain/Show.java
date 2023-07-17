@@ -31,6 +31,7 @@ public class Show {
     }
 
     public Show(String title, ShowType showType, LocalTime playtime, String description) {
+        validateDescription(description);
         this.title = title;
         this.showType = showType;
         this.playtime = playtime;
