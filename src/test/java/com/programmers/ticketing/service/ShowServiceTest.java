@@ -164,4 +164,34 @@ class ShowServiceTest {
         assertThatThrownBy(() -> showService.updateShow(1L, null, updateDescription))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    @DisplayName("성공: show 단건 삭제 기능")
+    void deleteShow() {
+        //given
+        Show show = new Show(
+                "title",
+                ShowType.CONCERT,
+                LocalTime.of(2, 30),
+                ""
+        );
+
+        //when
+        showRepository.delete(show);
+
+        //then
+        then(showRepository).should().delete(any());
+    }
+
+    @Test
+    @DisplayName("예외: show 단건 삭제 기능 - 존재하지 않는 show")
+    void deleteShow_ButNoSuchElement_Then_Exception() {
+        //given
+        given(showRepository.findById(any())).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> showService.deleteShow(any()))
+                .isInstanceOf(NoSuchElementException.class);
+    }
 }

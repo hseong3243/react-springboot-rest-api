@@ -56,4 +56,14 @@ public class ShowService {
                 });
         show.update(playtime, description);
     }
+
+    @Transactional
+    public void deleteShow(Long showId) {
+        Show show = showRepository.findById(showId)
+                .orElseThrow(() -> {
+                    log.warn("No such Show exist - ShowId: {}", showId);
+                    return new NoSuchElementException("No such Show exist");
+                });
+        showRepository.delete(show);
+    }
 }
