@@ -59,4 +59,15 @@ public class Theater {
     private boolean isAddressLengthOutOfRange(String address) {
         return address.length() > 200;
     }
+
+    public void update(String name, String address) {
+        if (name != null) {
+            validateName(name);
+            this.name = name;
+        }
+        if (address != null) {
+            validateAddress(address);
+            this.address = address;
+        }
+    }
 }

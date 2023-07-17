@@ -135,4 +135,54 @@ class TheaterServiceTest {
         assertThat(theaterDtos).usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(theaterDtoA, theaterDtoB);
     }
+
+    @Test
+    @DisplayName("성공: theater 업데이트 기능")
+    void updateTheater() {
+        //given
+        Theater theater = new Theater("theater", "address");
+
+        given(theaterRepository.findById(any())).willReturn(Optional.of(theater));
+
+        //when
+        String updatedName = "updateTheater";
+        String updatedAddress = "updateAddress";
+        theaterService.updateTheater(1L, updatedName, updatedAddress);
+
+        //then
+        assertThat(theater.getName()).isEqualTo("updateTheater");
+        assertThat(theater.getAddress()).isEqualTo("updateAddress");
+    }
+
+    @Test
+    @DisplayName("예외: theater 업데이트 기능 - 범위를 넘은 name")
+    void updateTheater_ButNameOutOfRange_Then_Exception() {
+        //given
+        Theater theater = new Theater("theater", "address");
+
+        given(theaterRepository.findById(any())).willReturn(Optional.of(theater));
+
+        //when
+        String updateName = "a".repeat(101);
+
+        //then
+        assertThatThrownBy(() -> theaterService.updateTheater(1L, updateName, null))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("예외: theater 업데이트 기능 - 범위를 넘은 address")
+    void updateTheater_ButAddressOutOfRange_Then_Exception() {
+        //given
+        Theater theater = new Theater("theater", "address");
+
+        given(theaterRepository.findById(any())).willReturn(Optional.of(theater));
+
+        //when
+        String updatedAddress = "a".repeat(201);
+
+        //then
+        assertThatThrownBy(() -> theaterService.updateTheater(1L, null, updatedAddress))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
 }

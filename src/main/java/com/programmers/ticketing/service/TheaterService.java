@@ -43,4 +43,14 @@ public class TheaterService {
                 .map(TheaterDto::from)
                 .toList();
     }
+
+    @Transactional
+    public void updateTheater(Long theaterId, String name, String address) {
+        Theater theater = theaterRepository.findById(theaterId)
+                .orElseThrow(() -> {
+                    log.warn("No such theater exist - TheaterId: {}", theaterId);
+                    return new NoSuchElementException("No such Theater exist");
+                });
+        theater.update(name, address);
+    }
 }
