@@ -43,6 +43,17 @@ public class ShowInformationService {
 
         ShowInformation showInformation = new ShowInformation(show, theater, startTime);
         showInformationRepository.save(showInformation);
-        return showInformation.getId();
+        return showInformation.getShowInformationId();
+    }
+
+    @Transactional(readOnly = true)
+    public ShowInformationDto findShowInformation(Long showInformationId) {
+        ShowInformation showInformation = showInformationRepository
+                .findShowInformationWithShowAndTheater(showInformationId)
+                .orElseThrow(() -> {
+                    log.warn("No such show information - ShowInformationId: {}", showInformationId);
+                    return new NoSuchElementException("No such show information");
+                });
+        return ShowInformationDto.from(showInformation, showInformation.getShow(), showInformation.getTheater());
     }
 }

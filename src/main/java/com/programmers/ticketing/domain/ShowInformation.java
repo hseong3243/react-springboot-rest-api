@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class ShowInformation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long showInformationId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "show_id", nullable = false)
