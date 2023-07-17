@@ -11,6 +11,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -52,5 +53,13 @@ public class SeatService {
                     return new NoSuchElementException("No such seat exist");
                 });
         return SeatDto.from(seat);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SeatDto> findSeats(Long theaterId) {
+        List<Seat> seats = seatRepository.findSeats(theaterId);
+        return seats.stream()
+                .map(SeatDto::from)
+                .toList();
     }
 }

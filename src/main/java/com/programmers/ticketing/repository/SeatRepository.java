@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface SeatRepository extends JpaRepository<Seat, Long> {
+public interface SeatRepository extends JpaRepository<Seat, Long>, SeatRepositoryCustom {
     Optional<Seat> findByTheaterAndSeatPosition(Theater theater, SeatPosition position);
 
     @Query("select s from Seat s join fetch s.theater t where s.seatId = :seatId")

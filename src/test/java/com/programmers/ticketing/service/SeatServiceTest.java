@@ -17,9 +17,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DuplicateKeyException;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static com.programmers.ticketing.TicketingTestUtil.createSeat;
 import static com.programmers.ticketing.TicketingTestUtil.createTheater;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -114,5 +116,27 @@ class SeatServiceTest {
         //then
         assertThatThrownBy(() -> seatService.findSeat(1L))
                 .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("성공: seat 목록 조회 기능")
+    void findSeats() {
+        //given
+        Seat seatA = createSeat("theaterA", 1);
+        Seat seatB = createSeat("theaterB", 1);
+        Seat seatC = createSeat("theaterC", 1);
+        List<Seat> seats = List.of(seatA, seatB, seatC);
+
+        given(seatRepository.findSeats(any())).willReturn(seats);
+
+        //when
+        List<SeatDto> seatDtos = seatService.findSeats(1L);
+
+        //then
+        SeatDto seatDtoA = SeatDto.from(seatA);
+        SeatDto seatDtoB = SeatDto.from(seatB);
+        SeatDto seatDtoC = SeatDto.from(seatC);
+        assertThat(seatDtos).usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(seatDtoA, seatDtoB, seatDtoC);
     }
 }

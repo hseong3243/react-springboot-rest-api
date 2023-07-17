@@ -45,4 +45,9 @@ public class TicketingTestUtil {
         SeatPosition seatPosition = new SeatPosition(position, position, position);
         return new Seat(theater, seatPosition);
     }
+
+    public static Seat createSeat(Theater theater, int position) {
+        SeatPosition seatPosition = new SeatPosition(position, position, position);
+        return new Seat(theater, seatPosition);
+    }
 }
