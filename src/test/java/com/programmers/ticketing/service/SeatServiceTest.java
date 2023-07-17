@@ -74,9 +74,8 @@ class SeatServiceTest {
     @DisplayName("예외: seat 단건 등록 기능 - 중복된 seat")
     void registerSeat_ButDuplicateSeatExist_Then_Exception() {
         //given
-        Theater theater = createTheater("theater");
-        SeatPosition seatPosition = new SeatPosition(1, 1, 1);
-        Seat seat = new Seat(theater, seatPosition);
+        Seat seat = TicketingTestUtil.createSeat("theater", 1);
+        Theater theater = seat.getTheater();
 
         given(theaterRepository.findById(any())).willReturn(Optional.of(theater));
         given(seatRepository.findByTheaterAndSeatPosition(any(), any())).willReturn(Optional.of(seat));
