@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.programmers.ticketing.TicketingTestUtil.createShow;
-import static com.programmers.ticketing.TicketingTestUtil.createTheater;
+import static com.programmers.ticketing.TicketingTestUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -190,5 +189,33 @@ class ShowInformationServiceTest {
         //then
         assertThatThrownBy(() -> informationService.updateShowInformation(1L, null, updateStartTime))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("성공: showInformation 단건 삭제 기능")
+    void deleteShowInformation() {
+        //given
+        LocalDateTime startTime = LocalDateTime.now().plusHours(1);
+        ShowInformation showInformation = createShowInformation("show", "theater", startTime);
+
+        given(showInformationRepository.findById(any())).willReturn(Optional.of(showInformation));
+
+        //when
+        informationService.deleteShowInformation(1L);
+
+        //then
+        then(showInformationRepository).should().delete(any());
+    }
+
+    @Test
+    @DisplayName("예외: showInformation 단건 삭제 기능 - 존재하지 않는 showInformation")
+    void deleteShowInformation_ButNoSuchElement_Then_Exception() {
+        //given
+        given(showInformationRepository.findById(any())).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> informationService.deleteShowInformation(1L))
+                .isInstanceOf(NoSuchElementException.class);
     }
 }

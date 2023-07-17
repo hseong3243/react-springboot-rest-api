@@ -77,4 +77,14 @@ public class ShowInformationService {
                 });
         showInformation.update(showStatus, startTime);
     }
+
+    @Transactional
+    public void deleteShowInformation(Long showInformationId) {
+        ShowInformation showInformation = showInformationRepository.findById(showInformationId)
+                .orElseThrow(() -> {
+                    log.warn("No such show information - ShowInformationId: {}", showInformationId);
+                    return new NoSuchElementException("No such show information");
+                });
+        showInformationRepository.delete(showInformation);
+    }
 }

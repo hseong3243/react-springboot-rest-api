@@ -1,9 +1,11 @@
 package com.programmers.ticketing;
 
 import com.programmers.ticketing.domain.Show;
+import com.programmers.ticketing.domain.ShowInformation;
 import com.programmers.ticketing.domain.ShowType;
 import com.programmers.ticketing.domain.Theater;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,5 +35,11 @@ public class TicketingTestUtil {
 
     public static Theater createTheater(String name) {
         return new Theater(name, "address " + name);
+    }
+
+    public static ShowInformation createShowInformation(String showTitle, String theaterName, LocalDateTime startTime) {
+        Show show = createShow("show");
+        Theater theater = createTheater("theater");
+        return new ShowInformation(show, theater, startTime);
     }
 }
