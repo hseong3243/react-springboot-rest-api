@@ -1,5 +1,7 @@
 package com.programmers.ticketing.service;
 
+import com.programmers.ticketing.domain.Theater;
+import com.programmers.ticketing.dto.TheaterDto;
 import com.programmers.ticketing.repository.TheaterRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -9,9 +11,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
@@ -93,5 +99,19 @@ class TheaterServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    @DisplayName("성공: theater 단건 조회 기능")
+    void findTheater() {
+        //given
+        Theater theater = new Theater("theater", "address");
 
+        given(theaterRepository.findById(any())).willReturn(Optional.of(theater));
+
+        //when
+        TheaterDto theaterDto = theaterService.findTheater(1L);
+
+        //then
+        assertThat(theaterDto.getName()).isEqualTo(theater.getName());
+        assertThat(theaterDto.getAddress()).isEqualTo(theater.getAddress());
+    }
 }
