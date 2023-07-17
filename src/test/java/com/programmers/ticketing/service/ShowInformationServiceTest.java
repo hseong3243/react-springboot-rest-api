@@ -114,4 +114,28 @@ class ShowInformationServiceTest {
         assertThatThrownBy(() -> informationService.findShowInformation(1L))
                 .isInstanceOf(NoSuchElementException.class);
     }
+
+    @Test
+    @DisplayName("성공: showInformation 목록 조회 기능")
+    void findShowInformations() {
+        //given
+        Show show = createShow("title");
+        Theater theater = createTheater("theater");
+        LocalDateTime startTime = LocalDateTime.now().plusHours(1);
+        ShowInformation showInformationA = new ShowInformation(show, theater, startTime);
+        ShowInformation showInformationB = new ShowInformation(show, theater, startTime);
+        List<ShowInformation> showInformations = List.of(showInformationA, showInformationB);
+
+        given(showInformationRepository.findShowInformations(any(), any(), any()))
+                .willReturn(showInformations);
+
+        //when
+        List<ShowInformationDto> result = informationService.findShowInformations(1L, 1L, startTime);
+
+        //then
+        ShowInformationDto showInformationDtoA = ShowInformationDto.from(showInformationA);
+        ShowInformationDto showInformationDtoB = ShowInformationDto.from(showInformationB);
+        assertThat(result).usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(showInformationDtoA, showInformationDtoB);
+    }
 }

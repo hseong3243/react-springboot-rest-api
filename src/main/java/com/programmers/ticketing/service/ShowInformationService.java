@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -54,6 +55,15 @@ public class ShowInformationService {
                     log.warn("No such show information - ShowInformationId: {}", showInformationId);
                     return new NoSuchElementException("No such show information");
                 });
-        return ShowInformationDto.from(showInformation, showInformation.getShow(), showInformation.getTheater());
+        return ShowInformationDto.from(showInformation);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ShowInformationDto> findShowInformations(Long showId, Long theaterId, LocalDateTime startTime) {
+        List<ShowInformation> showInformations
+                = showInformationRepository.findShowInformations(showId, theaterId, startTime);
+        return showInformations.stream()
+                .map(ShowInformationDto::from)
+                .toList();
     }
 }

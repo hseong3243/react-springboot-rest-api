@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface ShowInformationRepository extends JpaRepository<ShowInformation, Long> {
+public interface ShowInformationRepository extends JpaRepository<ShowInformation, Long>, ShowInformationRepositoryCustom {
     @Query("select si from ShowInformation si" +
             " join fetch si.show s" +
             " join fetch si.theater t" +
