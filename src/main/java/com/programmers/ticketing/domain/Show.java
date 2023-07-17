@@ -23,6 +23,7 @@ public class Show {
     @Column(nullable = false)
     private LocalTime playtime;
 
+    @Column(length = 1000)
     private String description;
 
     public Show() {
@@ -34,5 +35,25 @@ public class Show {
         this.showType = showType;
         this.playtime = playtime;
         this.description = description;
+    }
+
+    public void update(LocalTime playtime, String description) {
+        if(playtime != null) {
+            this.playtime = playtime;
+        }
+        if(description != null) {
+            validateDescription(description);
+            this.description = description;
+        }
+    }
+
+    private void validateDescription(String description) {
+        if (isDescriptionLengthOutOfRange(description)) {
+            throw new IllegalArgumentException("Show description length must less than 1000");
+        }
+    }
+
+    private boolean isDescriptionLengthOutOfRange(String description) {
+        return description.length() > 1000;
     }
 }

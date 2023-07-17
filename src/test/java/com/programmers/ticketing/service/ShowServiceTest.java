@@ -17,6 +17,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -101,5 +102,49 @@ class ShowServiceTest {
         ShowDto showDtoB = ShowDto.from(showB);
         assertThat(result).usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(showDtoA, showDtoB);
+    }
+
+    @Test
+    @DisplayName("성공: show 단건 업데이트")
+    void updateShow() {
+        //given
+        Show show = new Show(
+                "title",
+                ShowType.CONCERT,
+                LocalTime.of(2, 30),
+                ""
+        );
+
+        given(showRepository.findById(any())).willReturn(Optional.of(show));
+
+        //when
+        LocalTime updatePlaytime = LocalTime.of(2, 0);
+        String updateDescription = "new description";
+        showService.updateShow(1L, updatePlaytime, updateDescription);
+
+        //then
+        assertThat(show.getPlaytime()).isEqualTo(LocalTime.of(2, 0));
+        assertThat(show.getDescription()).isEqualTo("new description");
+    }
+
+    @Test
+    @DisplayName("예외: show 단건 업데이트 - 범위를 넘은 description")
+    void updateShow_ButDescriptionOutOfRange_Then_Exception() {
+        //given
+        Show show = new Show(
+                "title",
+                ShowType.CONCERT,
+                LocalTime.of(2, 30),
+                ""
+        );
+
+        given(showRepository.findById(any())).willReturn(Optional.of(show));
+
+        //when
+        String updateDescription = "a".repeat(1001);
+
+        //then
+        assertThatThrownBy(() -> showService.updateShow(1L, null, updateDescription))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }

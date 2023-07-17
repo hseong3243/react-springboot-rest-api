@@ -46,4 +46,14 @@ public class ShowService {
                 .map(ShowDto::from)
                 .toList();
     }
+
+    @Transactional
+    public void updateShow(Long showId, LocalTime playtime, String description) {
+        Show show = showRepository.findById(showId)
+                .orElseThrow(() -> {
+                    log.warn("No such Show exist - ShowId: {}", showId);
+                    return new NoSuchElementException("No such Show exist");
+                });
+        show.update(playtime, description);
+    }
 }
