@@ -1,9 +1,6 @@
 package com.programmers.ticketing;
 
-import com.programmers.ticketing.domain.Show;
-import com.programmers.ticketing.domain.ShowInformation;
-import com.programmers.ticketing.domain.ShowType;
-import com.programmers.ticketing.domain.Theater;
+import com.programmers.ticketing.domain.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -41,5 +38,11 @@ public class TicketingTestUtil {
         Show show = createShow("show");
         Theater theater = createTheater("theater");
         return new ShowInformation(show, theater, startTime);
+    }
+
+    public static Seat createSeat(String theaterName, int position) {
+        Theater theater = createTheater(theaterName);
+        SeatPosition seatPosition = new SeatPosition(position, position, position);
+        return new Seat(theater, seatPosition);
     }
 }

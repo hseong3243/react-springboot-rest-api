@@ -3,6 +3,7 @@ package com.programmers.ticketing.service;
 import com.programmers.ticketing.domain.SeatPosition;
 import com.programmers.ticketing.domain.Seat;
 import com.programmers.ticketing.domain.Theater;
+import com.programmers.ticketing.dto.SeatDto;
 import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.TheaterRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -43,5 +44,13 @@ public class SeatService {
         return seat.getSeatId();
     }
 
-
+    @Transactional(readOnly = true)
+    public SeatDto findSeat(Long seatId) {
+        Seat seat = seatRepository.findSeatWithTheater(seatId)
+                .orElseThrow(() -> {
+                    log.warn("No such seat exist - SeatId: {}", seatId);
+                    return new NoSuchElementException("No such seat exist");
+                });
+        return SeatDto.from(seat);
+    }
 }

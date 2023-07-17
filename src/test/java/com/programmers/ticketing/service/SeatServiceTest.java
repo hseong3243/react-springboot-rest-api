@@ -1,8 +1,12 @@
 package com.programmers.ticketing.service;
 
+import com.programmers.ticketing.TicketingTestUtil;
 import com.programmers.ticketing.domain.Seat;
 import com.programmers.ticketing.domain.SeatPosition;
 import com.programmers.ticketing.domain.Theater;
+import com.programmers.ticketing.dto.SeatDto;
+import com.programmers.ticketing.dto.SeatPositionDto;
+import com.programmers.ticketing.dto.TheaterDto;
 import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.TheaterRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -81,5 +85,35 @@ class SeatServiceTest {
         //then
         assertThatThrownBy(() -> seatService.registerSeat(1L, 1, 1, 1))
                 .isInstanceOf(DuplicateKeyException.class);
+    }
+
+    @Test
+    @DisplayName("성공: seat 단건 조회 기능")
+    void findSeat() {
+        //given
+        Seat seat = TicketingTestUtil.createSeat("theater", 1);
+
+        given(seatRepository.findSeatWithTheater(any())).willReturn(Optional.of(seat));
+
+        //when
+        SeatDto seatDto = seatService.findSeat(1L);
+
+        //then
+        TheaterDto theaterDto = TheaterDto.from(seat.getTheater());
+        SeatPositionDto seatPositionDto = SeatPositionDto.from(seat.getSeatPosition());
+        assertThat(seatDto.getTheaterDto()).usingRecursiveComparison().isEqualTo(theaterDto);
+        assertThat(seatDto.getSeatPositionDto()).usingRecursiveComparison().isEqualTo(seatPositionDto);
+    }
+
+    @Test
+    @DisplayName("예외: seat 단건 조회 기능 - 존재하지 않는 seat")
+    void findSeat_ButNoSuchElement_Then_Exception() {
+        //given
+        given(seatRepository.findSeatWithTheater(any())).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> seatService.findSeat(1L))
+                .isInstanceOf(NoSuchElementException.class);
     }
 }
