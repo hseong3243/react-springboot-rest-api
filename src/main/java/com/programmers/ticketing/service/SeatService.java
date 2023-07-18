@@ -3,7 +3,7 @@ package com.programmers.ticketing.service;
 import com.programmers.ticketing.domain.SeatPosition;
 import com.programmers.ticketing.domain.Seat;
 import com.programmers.ticketing.domain.Theater;
-import com.programmers.ticketing.dto.SeatDto;
+import com.programmers.ticketing.dto.seat.SeatDto;
 import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.TheaterRepository;
 import lombok.extern.slf4j.Slf4j;

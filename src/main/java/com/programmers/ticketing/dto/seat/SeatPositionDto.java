@@ -1,4 +1,4 @@
-package com.programmers.ticketing.dto;
+package com.programmers.ticketing.dto.seat;
 
 import com.programmers.ticketing.domain.SeatPosition;
 import lombok.Getter;

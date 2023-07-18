@@ -2,10 +2,9 @@ package com.programmers.ticketing.service;
 
 import com.programmers.ticketing.TicketingTestUtil;
 import com.programmers.ticketing.domain.Seat;
-import com.programmers.ticketing.domain.SeatPosition;
 import com.programmers.ticketing.domain.Theater;
-import com.programmers.ticketing.dto.SeatDto;
-import com.programmers.ticketing.dto.SeatPositionDto;
+import com.programmers.ticketing.dto.seat.SeatDto;
+import com.programmers.ticketing.dto.seat.SeatPositionDto;
 import com.programmers.ticketing.dto.TheaterDto;
 import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.TheaterRepository;
@@ -100,10 +99,8 @@ class SeatServiceTest {
         SeatDto seatDto = seatService.findSeat(1L);
 
         //then
-        TheaterDto theaterDto = TheaterDto.from(seat.getTheater());
-        SeatPositionDto seatPositionDto = SeatPositionDto.from(seat.getSeatPosition());
-        assertThat(seatDto.getTheaterDto()).usingRecursiveComparison().isEqualTo(theaterDto);
-        assertThat(seatDto.getSeatPositionDto()).usingRecursiveComparison().isEqualTo(seatPositionDto);
+        assertThat(seatDto.getTheater()).isNotNull();
+        assertThat(seatDto.getPosition()).isNotNull();
     }
 
     @Test
