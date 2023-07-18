@@ -24,6 +24,10 @@ public class ShowSeat {
 
     private int fee;
 
+    public ShowSeat() {
+
+    }
+
     public ShowSeat(ShowInformation showInformation, Seat seat, SeatGrade seatGrade, int fee) {
         this.showInformation = showInformation;
         this.seat = seat;
