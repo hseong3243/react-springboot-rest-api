@@ -2,11 +2,12 @@ package com.programmers.ticketing.service;
 
 import com.programmers.ticketing.domain.Reservation;
 import com.programmers.ticketing.domain.ShowSeat;
+import com.programmers.ticketing.dto.ReservationDto;
 import com.programmers.ticketing.repository.ShowSeatRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -27,5 +28,13 @@ public class ReservationService {
         Reservation reservation = new Reservation(showSeat, email);
         reservationRepository.save(reservation);
         return reservation.getReservationId();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReservationDto> findReservations(String email) {
+        List<Reservation> reservations = reservationRepository.findAllByEmailWithOthers(email);
+        return reservations.stream()
+                .map(ReservationDto::from)
+                .toList();
     }
 }

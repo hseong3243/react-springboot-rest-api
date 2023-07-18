@@ -14,6 +14,7 @@ public class TicketingTestUtil {
     private static final LocalDateTime DEFAULT_START_TIME = LocalDateTime.now().plusHours(1);
     private static final String DEFAULT_THEATER_NAME = "theater";
     private static final String DEFAULT_SHOW_TITLE = "title";
+    private static final String DEFAULT_EMAIL = "email@gmail.com";
 
     public static List<Show> createShows(int num) {
         List<Show> shows = new ArrayList<>();
@@ -69,7 +70,7 @@ public class TicketingTestUtil {
 
     public static List<Seat> createSeats(Theater theater, int seatCount) {
         List<Seat> seats = new ArrayList<>();
-        for(int i=0; i<seatCount; i++) {
+        for (int i = 0; i < seatCount; i++) {
             Seat seat = createSeat(theater, 50);
             seats.add(seat);
         }
@@ -86,11 +87,25 @@ public class TicketingTestUtil {
         Show show = createShow(DEFAULT_SHOW_TITLE);
         ShowInformation showInformation = createShowInformation(theater, show);
         SeatGrade seatGrade = new SeatGrade(DEFAULT_SEAT_GRADE);
-        for(int i=0; i<seatCount; i++) {
+        for (int i = 0; i < seatCount; i++) {
             Seat seat = createSeat(theater, i);
             ShowSeat showSeat = new ShowSeat(showInformation, seat, seatGrade, DEFAULT_FEE);
             showSeats.add(showSeat);
         }
         return showSeats;
+    }
+
+    public static Reservation createReservation() {
+        ShowSeat showSeat = createShowSeat();
+        return new Reservation(showSeat, DEFAULT_EMAIL);
+    }
+
+    public static List<Reservation> createReservations(int count) {
+        List<Reservation> reservations = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            Reservation reservation = createReservation();
+            reservations.add(reservation);
+        }
+        return reservations;
     }
 }
