@@ -4,6 +4,7 @@ import com.programmers.ticketing.domain.Seat;
 import com.programmers.ticketing.domain.SeatGrade;
 import com.programmers.ticketing.domain.ShowInformation;
 import com.programmers.ticketing.domain.ShowSeat;
+import com.programmers.ticketing.dto.ShowSeatDto;
 import com.programmers.ticketing.repository.SeatGradeRepository;
 import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.ShowInformationRepository;
@@ -74,6 +75,20 @@ public class ShowSeatService {
         showSeatRepository.saveAll(showSeats);
         return showSeats.stream()
                 .map(ShowSeat::getShowSeatId)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ShowSeatDto> findShowSeats(Long showInformationId) {
+        ShowInformation showInformation = showInformationRepository.findById(showInformationId)
+                .orElseThrow(() -> {
+                    log.warn("No such show information exist - ShowInformationId: {}", showInformationId);
+                    return new NoSuchElementException("No such show information exist");
+                });
+
+        List<ShowSeat> showSeats = showSeatRepository.findAllByShowInformationWithShowInformationAndSeatAndSeatGrade(showInformation);
+        return showSeats.stream()
+                .map(ShowSeatDto::from)
                 .toList();
     }
 }

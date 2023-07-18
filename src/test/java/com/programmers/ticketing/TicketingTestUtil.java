@@ -8,6 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TicketingTestUtil {
+    private static final String DEFAULT_SEAT_GRADE = "vip";
+    private static final ShowType DEFAULT_SHOW_TYPE = ShowType.CONCERT;
+    private static final int DEFAULT_FEE = 1000;
+    private static final LocalDateTime DEFAULT_START_TIME = LocalDateTime.now().plusHours(1);
+    private static final String DEFAULT_THEATER_NAME = "theater";
+    private static final String DEFAULT_SHOW_TITLE = "title";
+
     public static List<Show> createShows(int num) {
         List<Show> shows = new ArrayList<>();
         for (int i = 0; i < num; i++) {
@@ -68,5 +75,23 @@ public class TicketingTestUtil {
             seats.add(seat);
         }
         return seats;
+    }
+
+    public static ShowInformation createShowInformation(Theater theater, Show show) {
+        return new ShowInformation(show, theater, DEFAULT_START_TIME);
+    }
+
+    public static List<ShowSeat> createShowSeats(int seatCount) {
+        List<ShowSeat> showSeats = new ArrayList<>();
+        Theater theater = createTheater(DEFAULT_THEATER_NAME);
+        Show show = createShow(DEFAULT_SHOW_TITLE);
+        ShowInformation showInformation = createShowInformation(theater, show);
+        SeatGrade seatGrade = new SeatGrade(DEFAULT_SEAT_GRADE);
+        for(int i=0; i<seatCount; i++) {
+            Seat seat = createSeat(theater, i);
+            ShowSeat showSeat = new ShowSeat(showInformation, seat, seatGrade, DEFAULT_FEE);
+            showSeats.add(showSeat);
+        }
+        return showSeats;
     }
 }
