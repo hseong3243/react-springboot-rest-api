@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -50,5 +52,28 @@ public class ShowSeatService {
         ShowSeat showSeat = new ShowSeat(showInformation, seat, seatGrade, fee);
         showSeatRepository.save(showSeat);
         return showSeat.getShowSeatId();
+    }
+
+    @Transactional
+    public List<Long> registerMultipleShowSeat(Long showInformationId, Long seatGradeId, List<Long> seatIds, int fee){
+        ShowInformation showInformation = showInformationRepository.findById(showInformationId)
+                .orElseThrow(() -> {
+                    log.warn("No such show information exist - ShowInformationId: {}", showInformationId);
+                    return new NoSuchElementException("No such show information exist");
+                });
+        SeatGrade seatGrade = seatGradeRepository.findById(seatGradeId)
+                .orElseThrow(() -> {
+                    log.warn("No such seat grade exist - SeatGradeId: {}", seatGradeId);
+                    return new NoSuchElementException("No such seat grade exist");
+                });
+
+        List<Seat> seats = seatRepository.findAllBySeatIdIn(seatIds);
+        List<ShowSeat> showSeats = seats.stream()
+                .map(seat -> new ShowSeat(showInformation, seat, seatGrade, fee))
+                .toList();
+        showSeatRepository.saveAll(showSeats);
+        return showSeats.stream()
+                .map(ShowSeat::getShowSeatId)
+                .toList();
     }
 }

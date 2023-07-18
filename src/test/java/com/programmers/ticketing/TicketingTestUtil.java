@@ -60,4 +60,13 @@ public class TicketingTestUtil {
 
         return new ShowSeat(showInformation, seat, seatGrade, fee);
     }
+
+    public static List<Seat> createSeats(Theater theater, int seatCount) {
+        List<Seat> seats = new ArrayList<>();
+        for(int i=0; i<seatCount; i++) {
+            Seat seat = createSeat(theater, 50);
+            seats.add(seat);
+        }
+        return seats;
+    }
 }

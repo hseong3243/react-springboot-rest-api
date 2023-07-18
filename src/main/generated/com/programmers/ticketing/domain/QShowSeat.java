@@ -22,6 +22,8 @@ public class QShowSeat extends EntityPathBase<ShowSeat> {
 
     public static final QShowSeat showSeat = new QShowSeat("showSeat");
 
+    public final NumberPath<Integer> fee = createNumber("fee", Integer.class);
+
     public final QSeat seat;
 
     public final QSeatGrade seatGrade;

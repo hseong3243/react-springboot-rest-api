@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface SeatRepository extends JpaRepository<Seat, Long>, SeatRepositoryCustom {
@@ -14,4 +15,6 @@ public interface SeatRepository extends JpaRepository<Seat, Long>, SeatRepositor
 
     @Query("select s from Seat s join fetch s.theater t where s.seatId = :seatId")
     Optional<Seat> findSeatWithTheater(@Param("seatId") Long seatId);
+
+    List<Seat> findAllBySeatIdIn(List<Long> seatIds);
 }

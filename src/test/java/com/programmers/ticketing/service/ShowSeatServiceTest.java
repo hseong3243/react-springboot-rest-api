@@ -1,10 +1,7 @@
 package com.programmers.ticketing.service;
 
 import com.programmers.ticketing.TicketingTestUtil;
-import com.programmers.ticketing.domain.Seat;
-import com.programmers.ticketing.domain.SeatGrade;
-import com.programmers.ticketing.domain.ShowInformation;
-import com.programmers.ticketing.domain.ShowSeat;
+import com.programmers.ticketing.domain.*;
 import com.programmers.ticketing.repository.SeatGradeRepository;
 import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.ShowInformationRepository;
@@ -18,8 +15,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
+import static com.programmers.ticketing.TicketingTestUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -60,5 +60,28 @@ class ShowSeatServiceTest {
 
         //then
         then(showSeatRepository).should().save(any());
+    }
+
+    @Test
+    @DisplayName("성공: showSeat 다건 등록 - 다수의 seatId")
+    void registerMultipleShowSeat() {
+        //given
+        LocalDateTime startTime = LocalDateTime.now().plusHours(1);
+        Theater theater = createTheater("theater");
+        Show show = createShow("title");
+        ShowInformation showInformation = new ShowInformation(show, theater, startTime);
+        SeatGrade seatGrade = new SeatGrade("vip");
+        List<Seat> seats = createSeats(theater, 50);
+
+        given(showInformationRepository.findById(any())).willReturn(Optional.of(showInformation));
+        given(seatGradeRepository.findById(any())).willReturn(Optional.of(seatGrade));
+        given(seatRepository.findAllBySeatIdIn(any())).willReturn(seats);
+
+
+        //when
+        showSeatService.registerMultipleShowSeat(1L, 1L, List.of(1L), 100);
+
+        //then
+        then(showSeatRepository).should().saveAll(any());
     }
 }
