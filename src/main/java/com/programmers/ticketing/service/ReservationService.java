@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -36,5 +37,12 @@ public class ReservationService {
         return reservations.stream()
                 .map(ReservationDto::from)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public ReservationDto findReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findByIdWithOthers(reservationId)
+                .orElseThrow(() -> new NoSuchElementException("No such reservation exist"));
+        return ReservationDto.from(reservation);
     }
 }
