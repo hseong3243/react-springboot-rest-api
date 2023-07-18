@@ -2,13 +2,11 @@ package com.programmers.ticketing.service;
 
 import com.programmers.ticketing.TicketingTestUtil;
 import com.programmers.ticketing.domain.*;
-import com.programmers.ticketing.dto.ShowSeatDto;
-import com.programmers.ticketing.dto.ShowSeatSeatDto;
+import com.programmers.ticketing.dto.showseat.ShowSeatDto;
 import com.programmers.ticketing.repository.SeatGradeRepository;
 import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.ShowInformationRepository;
 import com.programmers.ticketing.repository.ShowSeatRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

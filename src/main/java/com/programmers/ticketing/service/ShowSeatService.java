@@ -4,7 +4,7 @@ import com.programmers.ticketing.domain.Seat;
 import com.programmers.ticketing.domain.SeatGrade;
 import com.programmers.ticketing.domain.ShowInformation;
 import com.programmers.ticketing.domain.ShowSeat;
-import com.programmers.ticketing.dto.ShowSeatDto;
+import com.programmers.ticketing.dto.showseat.ShowSeatDto;
 import com.programmers.ticketing.repository.SeatGradeRepository;
 import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.ShowInformationRepository;
@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
