@@ -1,6 +1,8 @@
 package com.programmers.ticketing.service;
 
+import com.programmers.ticketing.domain.Seat;
 import com.programmers.ticketing.domain.SeatGrade;
+import com.programmers.ticketing.dto.SeatGradeDto;
 import com.programmers.ticketing.repository.SeatGradeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -10,9 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -77,5 +81,25 @@ class SeatGradeServiceTest {
         //then
         assertThatThrownBy(() -> seatGradeService.deleteSeatGrade(1L))
                 .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    @DisplayName("성공: seatGrade 목록 조회")
+    void findSeatGrades() {
+        //given
+        SeatGrade seatGradeA = new SeatGrade("seatGradeA");
+        SeatGrade seatGradeB = new SeatGrade("seatGradeB");
+        List<SeatGrade> seatGrades = List.of(seatGradeA, seatGradeB);
+
+        given(seatGradeRepository.findAll()).willReturn(seatGrades);
+
+        //when
+        List<SeatGradeDto> result = seatGradeService.findSeatGrades();
+
+        //then
+        SeatGradeDto seatGradeDtoA = SeatGradeDto.from(seatGradeA);
+        SeatGradeDto seatGradeDtoB = SeatGradeDto.from(seatGradeB);
+        assertThat(result).usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(seatGradeDtoA, seatGradeDtoB);
     }
 }

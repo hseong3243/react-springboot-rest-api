@@ -1,11 +1,13 @@
 package com.programmers.ticketing.service;
 
 import com.programmers.ticketing.domain.SeatGrade;
+import com.programmers.ticketing.dto.SeatGradeDto;
 import com.programmers.ticketing.repository.SeatGradeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -22,6 +24,14 @@ public class SeatGradeService {
         SeatGrade seatGrade = new SeatGrade(name);
         seatGradeRepository.save(seatGrade);
         return seatGrade.getSeatGradeId();
+    }
+
+    @Transactional(readOnly = true)
+    public List<SeatGradeDto> findSeatGrades() {
+        List<SeatGrade> seatGrades = seatGradeRepository.findAll();
+        return seatGrades.stream()
+                .map(SeatGradeDto::from)
+                .toList();
     }
 
     @Transactional
