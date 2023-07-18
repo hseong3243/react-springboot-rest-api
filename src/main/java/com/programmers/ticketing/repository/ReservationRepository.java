@@ -1,4 +1,4 @@
-package com.programmers.ticketing.service;
+package com.programmers.ticketing.repository;
 
 import com.programmers.ticketing.domain.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;

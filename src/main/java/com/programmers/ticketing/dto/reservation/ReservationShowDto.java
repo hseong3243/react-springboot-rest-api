@@ -1,4 +1,4 @@
-package com.programmers.ticketing.dto;
+package com.programmers.ticketing.dto.reservation;
 
 import com.programmers.ticketing.domain.Show;
 import com.programmers.ticketing.domain.ShowInformation;

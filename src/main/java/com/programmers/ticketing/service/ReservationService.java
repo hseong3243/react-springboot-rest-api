@@ -2,14 +2,14 @@ package com.programmers.ticketing.service;
 
 import com.programmers.ticketing.domain.Reservation;
 import com.programmers.ticketing.domain.ShowSeat;
-import com.programmers.ticketing.dto.ReservationDto;
+import com.programmers.ticketing.dto.reservation.ReservationDto;
+import com.programmers.ticketing.repository.ReservationRepository;
 import com.programmers.ticketing.repository.ShowSeatRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class ReservationService {

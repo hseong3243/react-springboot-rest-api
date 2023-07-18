@@ -1,13 +1,12 @@
 package com.programmers.ticketing.service;
 
-import com.programmers.ticketing.TicketingTestUtil;
 import com.programmers.ticketing.domain.*;
 import com.programmers.ticketing.dto.ShowDto;
+import com.programmers.ticketing.dto.ShowInformationDto;
 import com.programmers.ticketing.dto.TheaterDto;
 import com.programmers.ticketing.repository.ShowInformationRepository;
 import com.programmers.ticketing.repository.ShowRepository;
 import com.programmers.ticketing.repository.TheaterRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +23,6 @@ import java.util.Optional;
 import static com.programmers.ticketing.TicketingTestUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;

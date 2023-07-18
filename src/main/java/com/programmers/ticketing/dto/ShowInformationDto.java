@@ -1,9 +1,7 @@
-package com.programmers.ticketing.service;
+package com.programmers.ticketing.dto;
 
 import com.programmers.ticketing.domain.ShowInformation;
 import com.programmers.ticketing.domain.ShowStatus;
-import com.programmers.ticketing.dto.ShowDto;
-import com.programmers.ticketing.dto.TheaterDto;
 import lombok.Getter;
 import lombok.Setter;
 

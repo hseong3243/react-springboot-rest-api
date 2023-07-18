@@ -4,6 +4,7 @@ import com.programmers.ticketing.domain.Show;
 import com.programmers.ticketing.domain.ShowInformation;
 import com.programmers.ticketing.domain.ShowStatus;
 import com.programmers.ticketing.domain.Theater;
+import com.programmers.ticketing.dto.ShowInformationDto;
 import com.programmers.ticketing.repository.ShowInformationRepository;
 import com.programmers.ticketing.repository.ShowRepository;
 import com.programmers.ticketing.repository.TheaterRepository;
