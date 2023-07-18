@@ -58,14 +58,13 @@ public class TicketingTestUtil {
         return new Seat(theater, seatPosition);
     }
 
-    public static ShowSeat createShowSeat(String seatGradeName, int fee) {
-        LocalDateTime startTime = LocalDateTime.now().plusHours(1);
-        ShowInformation showInformation = createShowInformation("title", "theater", startTime);
-        Theater theater = showInformation.getTheater();
+    public static ShowSeat createShowSeat() {
+        Theater theater = createTheater(DEFAULT_THEATER_NAME);
+        Show show = createShow(DEFAULT_SHOW_TITLE);
+        ShowInformation showInformation = createShowInformation(theater, show);
+        SeatGrade seatGrade = new SeatGrade(DEFAULT_SEAT_GRADE);
         Seat seat = createSeat(theater, 1);
-        SeatGrade seatGrade = new SeatGrade(seatGradeName);
-
-        return new ShowSeat(showInformation, seat, seatGrade, fee);
+        return new ShowSeat(showInformation, seat, seatGrade, DEFAULT_FEE);
     }
 
     public static List<Seat> createSeats(Theater theater, int seatCount) {

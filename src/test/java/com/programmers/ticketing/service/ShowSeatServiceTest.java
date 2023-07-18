@@ -47,7 +47,7 @@ class ShowSeatServiceTest {
     @DisplayName("성공: showSeat 단건 등록")
     void registerShowSeat() {
         //given
-        ShowSeat showSeat = TicketingTestUtil.createShowSeat("vip", 100);
+        ShowSeat showSeat = TicketingTestUtil.createShowSeat();
         ShowInformation showInformation = showSeat.getShowInformation();
         SeatGrade seatGrade = showSeat.getSeatGrade();
         Seat seat = showSeat.getSeat();
