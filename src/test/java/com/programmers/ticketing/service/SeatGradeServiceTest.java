@@ -1,5 +1,6 @@
 package com.programmers.ticketing.service;
 
+import com.programmers.ticketing.domain.SeatGrade;
 import com.programmers.ticketing.repository.SeatGradeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -9,9 +10,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,5 +50,32 @@ class SeatGradeServiceTest {
         //then
         assertThatThrownBy(() -> seatGradeService.registerSeatGrade(name))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("예외: seatGrade 단건 삭제")
+    void deleteSeatGrade() {
+        //given
+        SeatGrade seatGrade = new SeatGrade("seatGrade");
+
+        given(seatGradeRepository.findById(any())).willReturn(Optional.of(seatGrade));
+
+        //when
+        seatGradeService.deleteSeatGrade(1L);
+
+        //then
+        then(seatGradeRepository).should().delete(any());
+    }
+
+    @Test
+    @DisplayName("예외: seatGrade 단건 삭제 - 존재하지 않는 seatGrade")
+    void deleteSeatGrade_ButNoSuchElement_Then_Exception() {
+        //given
+        given(seatGradeRepository.findById(any())).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> seatGradeService.deleteSeatGrade(1L))
+                .isInstanceOf(NoSuchElementException.class);
     }
 }
