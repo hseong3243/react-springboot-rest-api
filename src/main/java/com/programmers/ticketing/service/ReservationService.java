@@ -45,4 +45,11 @@ public class ReservationService {
                 .orElseThrow(() -> new NoSuchElementException("No such reservation exist"));
         return ReservationDto.from(reservation);
     }
+
+    @Transactional
+    public void deleteReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NoSuchElementException("No such reservation exist"));
+        reservationRepository.delete(reservation);
+    }
 }

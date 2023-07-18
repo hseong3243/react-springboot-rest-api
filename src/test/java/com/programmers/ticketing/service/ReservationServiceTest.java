@@ -95,4 +95,31 @@ class ReservationServiceTest {
         assertThatThrownBy(() -> reservationService.findReservation(any()))
                 .isInstanceOf(NoSuchElementException.class);
     }
+
+    @Test
+    @DisplayName("성공: reservation 단건 삭제")
+    void deleteReservation() {
+        //given
+        Reservation reservation = TicketingTestUtil.createReservation();
+
+        given(reservationRepository.findById(any())).willReturn(Optional.of(reservation));
+
+        //when
+        reservationService.deleteReservation(1L);
+
+        //then
+        then(reservationRepository).should().delete(any());
+    }
+
+    @Test
+    @DisplayName("예외: reservation 단건 삭제 - 존재하지 않는 reservation")
+    void deleteReservation_ButNoSuchElement_Then_Exception() {
+        //given
+        given(reservationRepository.findById(any())).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> reservationService.deleteReservation(1L))
+                .isInstanceOf(NoSuchElementException.class);
+    }
 }
