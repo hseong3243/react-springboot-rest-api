@@ -90,4 +90,11 @@ public class ShowSeatService {
                 .map(ShowSeatDto::from)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public ShowSeatDto findShowSeat(Long showSeatId) {
+        ShowSeat showSeat = showSeatRepository.findByIdWithSeatAndSeatGrade(showSeatId)
+                .orElseThrow(() -> new NoSuchElementException("No such show seat exist"));
+        return ShowSeatDto.from(showSeat);
+    }
 }

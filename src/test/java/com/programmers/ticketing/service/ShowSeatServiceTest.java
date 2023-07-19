@@ -16,10 +16,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.programmers.ticketing.TicketingTestUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -103,5 +105,33 @@ class ShowSeatServiceTest {
         List<ShowSeatDto> showSeatDtos = showSeats.stream().map(ShowSeatDto::from).toList();
         assertThat(result).usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrderElementsOf(showSeatDtos);
+    }
+
+    @Test
+    @DisplayName("성공: showSeat 단건 조회")
+    void findShowSeat() {
+        //given
+        ShowSeat showSeat = createShowSeat();
+
+        given(showSeatRepository.findByIdWithSeatAndSeatGrade(any())).willReturn(Optional.of(showSeat));
+
+        //when
+        ShowSeatDto showSeatDto = showSeatService.findShowSeat(1L);
+
+        //then
+        assertThat(showSeatDto.getSeat()).isNotNull();
+        assertThat(showSeatDto.getFee()).isEqualTo(showSeat.getFee());
+    }
+
+    @Test
+    @DisplayName("예외: showSeat 단건 조회 - 존재하지 않는 showSeat")
+    void findShowSeat_ButNoSuchElement_Then_Exception() {
+        //given
+        given(showSeatRepository.findByIdWithSeatAndSeatGrade(any())).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> showSeatService.findShowSeat(1L))
+                .isInstanceOf(NoSuchElementException.class);
     }
 }
