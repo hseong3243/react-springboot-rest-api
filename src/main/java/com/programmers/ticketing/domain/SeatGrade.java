@@ -12,7 +12,7 @@ public class SeatGrade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seatGradeId;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50, unique = true)
     private String name;
 
     @Temporal(TemporalType.TIMESTAMP)

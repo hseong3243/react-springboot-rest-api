@@ -4,6 +4,7 @@ import com.programmers.ticketing.domain.SeatGrade;
 import com.programmers.ticketing.dto.SeatGradeDto;
 import com.programmers.ticketing.repository.SeatGradeRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,11 @@ public class SeatGradeService {
 
     @Transactional
     public Long registerSeatGrade(String name) {
+        seatGradeRepository.findByName(name)
+                .ifPresent(seatGrade -> {
+                    throw new DuplicateKeyException("Duplicate seat grade name exist");
+                });
+
         SeatGrade seatGrade = new SeatGrade(name);
         seatGradeRepository.save(seatGrade);
         return seatGrade.getSeatGradeId();
