@@ -5,6 +5,12 @@ import lombok.Getter;
 
 @Getter
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(
+                name = "UniqueShowInformationAndSeat",
+                columnNames = {"show_information_id", "seat_id"}
+        )
+})
 public class ShowSeat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

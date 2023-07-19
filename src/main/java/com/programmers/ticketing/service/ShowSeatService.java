@@ -10,6 +10,7 @@ import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.ShowInformationRepository;
 import com.programmers.ticketing.repository.ShowSeatRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +49,10 @@ public class ShowSeatService {
                     log.warn("No such seat exist - SeatId: {}", seatId);
                     return new NoSuchElementException("No such seat exist");
                 });
+        showSeatRepository.findByShowInformationAndSeat(showInformation, seat)
+                .ifPresent(showSeat -> {
+                    throw new DuplicateKeyException("Show seat already exist");
+                });
 
         ShowSeat showSeat = new ShowSeat(showInformation, seat, seatGrade, fee);
         showSeatRepository.save(showSeat);
@@ -55,7 +60,7 @@ public class ShowSeatService {
     }
 
     @Transactional
-    public List<Long> registerMultipleShowSeat(Long showInformationId, Long seatGradeId, List<Long> seatIds, int fee){
+    public List<Long> registerMultipleShowSeat(Long showInformationId, Long seatGradeId, List<Long> seatIds, int fee) {
         ShowInformation showInformation = showInformationRepository.findById(showInformationId)
                 .orElseThrow(() -> {
                     log.warn("No such show information exist - ShowInformationId: {}", showInformationId);
@@ -66,9 +71,9 @@ public class ShowSeatService {
                     log.warn("No such seat grade exist - SeatGradeId: {}", seatGradeId);
                     return new NoSuchElementException("No such seat grade exist");
                 });
+        List<Seat> noneDuplicateSeats = seatRepository.findSeatsNotExistShowSeatByShowInformationAndSeatIdsIn(showInformation, seatIds);
 
-        List<Seat> seats = seatRepository.findAllBySeatIdIn(seatIds);
-        List<ShowSeat> showSeats = seats.stream()
+        List<ShowSeat> showSeats = noneDuplicateSeats.stream()
                 .map(seat -> new ShowSeat(showInformation, seat, seatGrade, fee))
                 .toList();
         showSeatRepository.saveAll(showSeats);
@@ -85,7 +90,7 @@ public class ShowSeatService {
                     return new NoSuchElementException("No such show information exist");
                 });
 
-        List<ShowSeat> showSeats = showSeatRepository.findAllByShowInformationWithShowInformationAndSeatAndSeatGrade(showInformation);
+        List<ShowSeat> showSeats = showSeatRepository.findAllByShowInformationWithSeatAndSeatGrade(showInformation);
         return showSeats.stream()
                 .map(ShowSeatDto::from)
                 .toList();

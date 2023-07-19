@@ -1,5 +1,6 @@
 package com.programmers.ticketing.repository;
 
+import com.programmers.ticketing.domain.Seat;
 import com.programmers.ticketing.domain.ShowInformation;
 import com.programmers.ticketing.domain.ShowSeat;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,14 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ShowSeatRepository extends JpaRepository<ShowSeat, Long> {
-    List<ShowSeat> findAllByShowInformation(ShowInformation showInformation);
-
     @Query("select ss from ShowSeat ss" +
-            " join fetch ss.showInformation si" +
             " join fetch ss.seat s" +
-            " join fetch ss.seatGrade" +
+            " join fetch ss.seatGrade sg" +
             " where ss.showInformation = :showInformation")
-    List<ShowSeat> findAllByShowInformationWithShowInformationAndSeatAndSeatGrade(@Param("showInformation") ShowInformation showInformation);
+    List<ShowSeat> findAllByShowInformationWithSeatAndSeatGrade(@Param("showInformation") ShowInformation showInformation);
 
     @Query("select ss from ShowSeat ss" +
             " join fetch ss.seat s" +
@@ -25,4 +23,5 @@ public interface ShowSeatRepository extends JpaRepository<ShowSeat, Long> {
             " where ss.showSeatId = :showSeatId")
     Optional<ShowSeat> findByIdWithSeatAndSeatGrade(@Param("showSeatId") Long showSeatId);
 
+    Optional<ShowSeat> findByShowInformationAndSeat(ShowInformation showInformation, Seat seat);
 }

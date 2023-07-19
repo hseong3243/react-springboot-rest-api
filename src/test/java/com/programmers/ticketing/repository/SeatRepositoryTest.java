@@ -1,10 +1,7 @@
 package com.programmers.ticketing.repository;
 
 import com.programmers.ticketing.TicketingTestUtil;
-import com.programmers.ticketing.domain.Seat;
-import com.programmers.ticketing.domain.SeatPosition;
-import com.programmers.ticketing.domain.Theater;
-import org.assertj.core.api.Assertions;
+import com.programmers.ticketing.domain.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +13,26 @@ import java.util.Optional;
 import static com.programmers.ticketing.TicketingTestUtil.createSeat;
 import static com.programmers.ticketing.TicketingTestUtil.createTheater;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class SeatRepositoryTest {
     @Autowired
+    private ShowSeatRepository showSeatRepository;
+
+    @Autowired
     private SeatRepository seatRepository;
 
     @Autowired
+    private ShowInformationRepository showInformationRepository;
+
+    @Autowired
+    private ShowRepository showRepository;
+
+    @Autowired
     private TheaterRepository theaterRepository;
+
+    @Autowired
+    private SeatGradeRepository seatGradeRepository;
 
     @Test
     @DisplayName("성공: seat 단건 조회 - theater 조인")
@@ -65,5 +73,32 @@ class SeatRepositoryTest {
 
         //then
         assertThat(seats.size()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("성공: seat 목록 조회 - showInformation, seat가 동일한 이미 만들어진 showSeat가 있으면 제외")
+    void findSeatsNotExistShowSeatByShowInformationSeatIdsIn() {
+        //given
+        ShowSeat showSeat = TicketingTestUtil.createShowSeat();
+        SeatGrade seatGrade = showSeat.getSeatGrade();
+        Seat seat = showSeat.getSeat();
+        ShowInformation showInformation = showSeat.getShowInformation();
+        Theater theater = seat.getTheater();
+        Show show = showInformation.getShow();
+        showRepository.save(show);
+        theaterRepository.save(theater);
+        seatRepository.save(seat);
+        showInformationRepository.save(showInformation);
+        seatGradeRepository.save(seatGrade);
+        showSeatRepository.save(showSeat);
+
+        Long seatId = seat.getSeatId();
+        List<Long> seatIds = List.of(seatId);
+
+        //when
+        List<Seat> noneDuplicateSeats = seatRepository.findSeatsNotExistShowSeatByShowInformationAndSeatIdsIn(showInformation, seatIds);
+
+        //then
+        assertThat(noneDuplicateSeats).isEmpty();
     }
 }

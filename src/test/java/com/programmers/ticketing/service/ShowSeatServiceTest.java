@@ -76,8 +76,8 @@ class ShowSeatServiceTest {
 
         given(showInformationRepository.findById(any())).willReturn(Optional.of(showInformation));
         given(seatGradeRepository.findById(any())).willReturn(Optional.of(seatGrade));
-        given(seatRepository.findAllBySeatIdIn(any())).willReturn(seats);
-
+        given(seatRepository.findSeatsNotExistShowSeatByShowInformationAndSeatIdsIn(any(), any()))
+                .willReturn(seats);
 
         //when
         showSeatService.registerMultipleShowSeat(1L, 1L, List.of(1L), 100);
@@ -95,7 +95,7 @@ class ShowSeatServiceTest {
         ShowInformation showInformation = showSeats.get(0).getShowInformation();
 
         given(showInformationRepository.findById(any())).willReturn(Optional.of(showInformation));
-        given(showSeatRepository.findAllByShowInformationWithShowInformationAndSeatAndSeatGrade(any()))
+        given(showSeatRepository.findAllByShowInformationWithSeatAndSeatGrade(any()))
                 .willReturn(showSeats);
 
         //when
