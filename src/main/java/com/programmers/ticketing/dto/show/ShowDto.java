@@ -1,4 +1,4 @@
-package com.programmers.ticketing.dto;
+package com.programmers.ticketing.dto.show;
 
 import com.programmers.ticketing.domain.Show;
 import com.programmers.ticketing.domain.ShowType;
