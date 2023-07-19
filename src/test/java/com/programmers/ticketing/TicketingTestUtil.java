@@ -15,6 +15,7 @@ public class TicketingTestUtil {
     private static final String DEFAULT_THEATER_NAME = "theater";
     private static final String DEFAULT_SHOW_TITLE = "title";
     private static final String DEFAULT_EMAIL = "email@gmail.com";
+    private static final SeatPosition DEFAULT_SEAT_POSITION = new SeatPosition(1, 1, 1);
 
     public static List<Show> createShows(int num) {
         List<Show> shows = new ArrayList<>();
@@ -122,5 +123,19 @@ public class TicketingTestUtil {
             showInformations.add(showInformation);
         }
         return showInformations;
+    }
+
+    public static Seat createSeat() {
+        Theater theater = createTheater(DEFAULT_THEATER_NAME);
+        return new Seat(theater, DEFAULT_SEAT_POSITION);
+    }
+
+    public static List<Seat> createSeats(int count) {
+        List<Seat> seats = new ArrayList<>();
+        for(int i=0; i<count; i++) {
+            Seat seat = createSeat();
+            seats.add(seat);
+        }
+        return seats;
     }
 }
