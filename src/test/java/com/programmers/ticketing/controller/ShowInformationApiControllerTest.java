@@ -116,11 +116,12 @@ class ShowInformationApiControllerTest {
     @DisplayName("성공: showInformation 단건 업데이트")
     void updateShowInformation() throws Exception {
         //given
-        ShowInformationUpdateRequest request = new ShowInformationUpdateRequest(1L, ShowStatus.STAGING, LocalDateTime.now());
+        Long showInformationId = 1L;
+        ShowInformationUpdateRequest request = new ShowInformationUpdateRequest(ShowStatus.STAGING, LocalDateTime.now());
         String jsonRequestPayload = mapper.writeValueAsString(request);
 
         //when
-        ResultActions resultActions = mvc.perform(patch("/api/v1/show-informations")
+        ResultActions resultActions = mvc.perform(patch("/api/v1/show-informations/" + showInformationId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonRequestPayload));
 

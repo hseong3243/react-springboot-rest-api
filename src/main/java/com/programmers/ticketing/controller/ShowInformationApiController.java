@@ -48,10 +48,11 @@ public class ShowInformationApiController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/show-informations")
-    public void updateShowInformation(@RequestBody @Valid ShowInformationUpdateRequest request) {
+    @PatchMapping("/show-informations/{showInformationsId}")
+    public void updateShowInformation(@PathVariable("showInformationsId") Long showInformationsId,
+                                      @RequestBody @Valid ShowInformationUpdateRequest request) {
         showInformationService.updateShowInformation(
-                request.getShowInformationId(),
+                showInformationsId,
                 request.getShowStatus(),
                 request.getStartTime());
     }
