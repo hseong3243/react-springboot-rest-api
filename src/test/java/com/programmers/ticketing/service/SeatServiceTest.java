@@ -4,8 +4,6 @@ import com.programmers.ticketing.TicketingTestUtil;
 import com.programmers.ticketing.domain.Seat;
 import com.programmers.ticketing.domain.Theater;
 import com.programmers.ticketing.dto.seat.SeatDto;
-import com.programmers.ticketing.dto.seat.SeatPositionDto;
-import com.programmers.ticketing.dto.TheaterDto;
 import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.TheaterRepository;
 import org.junit.jupiter.api.DisplayName;

@@ -4,7 +4,6 @@ import com.programmers.ticketing.domain.Show;
 import com.programmers.ticketing.domain.ShowInformation;
 import com.programmers.ticketing.domain.ShowStatus;
 import com.programmers.ticketing.domain.Theater;
-import com.programmers.ticketing.dto.TheaterDto;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

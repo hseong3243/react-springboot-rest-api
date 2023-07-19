@@ -1,7 +1,7 @@
 package com.programmers.ticketing.service;
 
 import com.programmers.ticketing.domain.Theater;
-import com.programmers.ticketing.dto.TheaterDto;
+import com.programmers.ticketing.dto.theater.TheaterDto;
 import com.programmers.ticketing.repository.TheaterRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

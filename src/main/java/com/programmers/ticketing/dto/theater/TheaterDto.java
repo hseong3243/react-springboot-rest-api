@@ -1,4 +1,4 @@
-package com.programmers.ticketing.dto;
+package com.programmers.ticketing.dto.theater;
 
 import com.programmers.ticketing.domain.Theater;
 import lombok.Getter;

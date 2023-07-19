@@ -1,8 +1,7 @@
-package com.programmers.ticketing.dto;
+package com.programmers.ticketing.dto.seatgrade;
 
 import com.programmers.ticketing.domain.SeatGrade;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 

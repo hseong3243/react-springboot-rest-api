@@ -1,6 +1,6 @@
 package com.programmers.ticketing.controller;
 
-import com.programmers.ticketing.dto.SeatGradeDto;
+import com.programmers.ticketing.dto.seatgrade.SeatGradeDto;
 import com.programmers.ticketing.dto.seatgrade.SeatGradeCreateRequest;
 import com.programmers.ticketing.service.SeatGradeService;
 import jakarta.validation.Valid;

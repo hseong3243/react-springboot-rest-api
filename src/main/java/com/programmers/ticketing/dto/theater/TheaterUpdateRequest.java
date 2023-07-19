@@ -1,4 +1,4 @@
-package com.programmers.ticketing.controller;
+package com.programmers.ticketing.dto.theater;
 
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

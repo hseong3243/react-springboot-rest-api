@@ -1,6 +1,8 @@
 package com.programmers.ticketing.controller;
 
-import com.programmers.ticketing.dto.TheaterDto;
+import com.programmers.ticketing.dto.theater.TheaterDto;
+import com.programmers.ticketing.dto.theater.TheaterCreateRequest;
+import com.programmers.ticketing.dto.theater.TheaterUpdateRequest;
 import com.programmers.ticketing.service.TheaterService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

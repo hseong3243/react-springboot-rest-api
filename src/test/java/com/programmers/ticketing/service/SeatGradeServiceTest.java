@@ -1,10 +1,8 @@
 package com.programmers.ticketing.service;
 
-import com.programmers.ticketing.domain.Seat;
 import com.programmers.ticketing.domain.SeatGrade;
-import com.programmers.ticketing.dto.SeatGradeDto;
+import com.programmers.ticketing.dto.seatgrade.SeatGradeDto;
 import com.programmers.ticketing.repository.SeatGradeRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +16,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;

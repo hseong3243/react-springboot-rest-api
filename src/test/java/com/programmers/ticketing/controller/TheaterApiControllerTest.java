@@ -1,9 +1,10 @@
 package com.programmers.ticketing.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.programmers.ticketing.TicketingTestUtil;
 import com.programmers.ticketing.domain.Theater;
-import com.programmers.ticketing.dto.TheaterDto;
+import com.programmers.ticketing.dto.theater.TheaterDto;
+import com.programmers.ticketing.dto.theater.TheaterCreateRequest;
+import com.programmers.ticketing.dto.theater.TheaterUpdateRequest;
 import com.programmers.ticketing.service.TheaterService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,13 +14,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
 import static com.programmers.ticketing.TicketingTestUtil.createTheater;
 import static com.programmers.ticketing.TicketingTestUtil.createTheaters;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

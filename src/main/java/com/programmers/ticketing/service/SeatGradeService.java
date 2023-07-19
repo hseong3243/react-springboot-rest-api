@@ -1,7 +1,7 @@
 package com.programmers.ticketing.service;
 
 import com.programmers.ticketing.domain.SeatGrade;
-import com.programmers.ticketing.dto.SeatGradeDto;
+import com.programmers.ticketing.dto.seatgrade.SeatGradeDto;
 import com.programmers.ticketing.repository.SeatGradeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
