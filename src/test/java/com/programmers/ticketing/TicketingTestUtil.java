@@ -108,4 +108,19 @@ public class TicketingTestUtil {
         }
         return reservations;
     }
+
+    public static ShowInformation createShowInformation() {
+        Theater theater = createTheater(DEFAULT_THEATER_NAME);
+        Show show = createShow(DEFAULT_SHOW_TITLE);
+        return new ShowInformation(show, theater, DEFAULT_START_TIME);
+    }
+
+    public static List<ShowInformation> createShowInformations(int count) {
+        List<ShowInformation> showInformations = new ArrayList<>();
+        for(int i=0; i<count; i++) {
+            ShowInformation showInformation = createShowInformation();
+            showInformations.add(showInformation);
+        }
+        return showInformations;
+    }
 }
