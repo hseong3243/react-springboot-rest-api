@@ -28,14 +28,14 @@ public class SeatApiController {
     }
 
     @PostMapping("/seats")
-    public ResponseEntity<Result<Long>> registerSeat(@RequestBody @Valid SeatCreateRequest request) {
-        Long seatId = seatService.registerSeat(
+    public ResponseEntity<Result<List<Long>>> registerSeat(@RequestBody @Valid SeatCreateRequest request) {
+        List<Long> seatIds = seatService.registerSeats(
                 request.getTheaterId(),
                 request.getSection(),
                 request.getSeatRow(),
                 request.getSeatNumber());
-        URI location = URI.create("/api/v1/seats/" + seatId);
-        return ResponseEntity.created(location).body(new Result<>(seatId));
+        URI location = URI.create("/api/v1/seats");
+        return ResponseEntity.created(location).body(new Result<>(seatIds));
     }
 
     @GetMapping("/seats/{seatId}")

@@ -26,4 +26,8 @@ public interface SeatRepository extends JpaRepository<Seat, Long>, SeatRepositor
             " and ss.seat.seatId in :seatIds)")
     List<Seat> findSeatsNotExistShowSeatByShowInformationAndSeatIdsIn(@Param("showInformation") ShowInformation showInformation,
                                                                       @Param("seatIds") List<Long> seatIds);
+
+    @Query("select s from Seat s where s.theater = :theater and s.seatPosition.section = :section")
+    List<Seat> findAllByTheaterAndSection(@Param("theater") Theater theater,
+                                          @Param("section") int section);
 }

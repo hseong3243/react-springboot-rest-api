@@ -68,7 +68,7 @@ class SeatApiControllerTest {
         SeatCreateRequest request = new SeatCreateRequest(1L, 1, 1, 1);
         String jsonRequestPayload = mapper.writeValueAsString(request);
 
-        given(seatService.registerSeat(any(), anyInt(), anyInt(), anyInt())).willReturn(1L);
+        given(seatService.registerSeats(any(), anyInt(), anyInt(), anyInt())).willReturn(List.of(1L));
 
         //when
         ResultActions resultActions = mvc.perform(post("/api/v1/seats")
@@ -79,7 +79,7 @@ class SeatApiControllerTest {
         //then
         resultActions.andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.data").isNumber());
+                .andExpect(jsonPath("$.data").isArray());
     }
 
     @Test

@@ -1,10 +1,12 @@
 package com.programmers.ticketing.domain;
 
 import jakarta.persistence.Embeddable;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
 @Embeddable
+@EqualsAndHashCode
 public class SeatPosition {
     private int section;
     private int seatRow;

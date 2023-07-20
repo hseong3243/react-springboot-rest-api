@@ -7,10 +7,10 @@ import com.programmers.ticketing.dto.seat.SeatDto;
 import com.programmers.ticketing.repository.SeatRepository;
 import com.programmers.ticketing.repository.TheaterRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -26,23 +26,43 @@ public class SeatService {
     }
 
     @Transactional
-    public Long registerSeat(Long theaterId, int section, int seatRow, int seatNumber) {
+    public List<Long> registerSeats(Long theaterId, int section, int seatRow, int seatNumber) {
         Theater theater = theaterRepository.findById(theaterId)
                 .orElseThrow(() -> {
                     log.warn("No such theater exist - TheaterId: {}", theaterId);
                     return new NoSuchElementException("No such theater exist");
                 });
 
-        SeatPosition seatPosition = new SeatPosition(section, seatRow, seatNumber);
-        seatRepository.findByTheaterAndSeatPosition(theater, seatPosition)
-                .ifPresent(seat -> {
-                    log.warn("Duplicate seat already exist - SeatId: {}", seat.getSeatId());
-                    throw new DuplicateKeyException("Duplicate seat already exist");
-                });
+        SeatPosition seatCreatesUnderPosition = new SeatPosition(section, seatRow, seatNumber);
+        List<Seat> noneDuplicateSeats = createNoneDuplicateSeats(theater, seatCreatesUnderPosition);
+        seatRepository.saveAll(noneDuplicateSeats);
 
-        Seat seat = new Seat(theater, seatPosition);
-        seatRepository.save(seat);
-        return seat.getSeatId();
+        return noneDuplicateSeats.stream()
+                .map(Seat::getSeatId)
+                .toList();
+    }
+
+    private List<Seat> createNoneDuplicateSeats(Theater theater, SeatPosition seatCreatesUnderPosition) {
+        int section = seatCreatesUnderPosition.getSection();
+        int seatRow = seatCreatesUnderPosition.getSeatRow();
+        int seatNumber = seatCreatesUnderPosition.getSeatNumber();
+
+        List<Seat> duplicateSeats = seatRepository.findAllByTheaterAndSection(theater, section);
+        List<Seat> seats = new ArrayList<>();
+        for (int row = 1; row <= seatRow; row++) {
+            for (int number = 1; number <= seatNumber; number++) {
+                SeatPosition seatPosition = new SeatPosition(section, row, number);
+                boolean duplicate = duplicateSeats.stream()
+                        .anyMatch(seat -> seat.isDuplicate(seatPosition));
+                if (duplicate) {
+                    continue;
+                }
+
+                Seat seat = new Seat(theater, seatPosition);
+                seats.add(seat);
+            }
+        }
+        return seats;
     }
 
     @Transactional(readOnly = true)

@@ -25,4 +25,8 @@ public class Seat {
         this.theater = theater;
         this.seatPosition = seatPosition;
     }
+
+    public boolean isDuplicate(SeatPosition seatPosition) {
+        return this.seatPosition.equals(seatPosition);
+    }
 }

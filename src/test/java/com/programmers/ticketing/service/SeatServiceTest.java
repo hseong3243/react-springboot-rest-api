@@ -2,6 +2,7 @@ package com.programmers.ticketing.service;
 
 import com.programmers.ticketing.TicketingTestUtil;
 import com.programmers.ticketing.domain.Seat;
+import com.programmers.ticketing.domain.SeatPosition;
 import com.programmers.ticketing.domain.Theater;
 import com.programmers.ticketing.dto.seat.SeatDto;
 import com.programmers.ticketing.repository.SeatRepository;
@@ -23,6 +24,7 @@ import static com.programmers.ticketing.TicketingTestUtil.createTheater;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -38,51 +40,56 @@ class SeatServiceTest {
     private TheaterRepository theaterRepository;
 
     @Test
-    @DisplayName("성공: seat 단건 등록 기능")
+    @DisplayName("성공: seat 다건 등록 기능")
     void registerSeat() {
         //given
         Theater theater = createTheater("theater");
 
         given(theaterRepository.findById(any())).willReturn(Optional.of(theater));
-        given(seatRepository.findByTheaterAndSeatPosition(any(), any())).willReturn(Optional.empty());
+        given(seatRepository.findAllByTheaterAndSection(any(), anyInt())).willReturn(List.of());
 
         //when
         long theaterId = 1L;
         int section = 1;
         int seatRow = 1;
         int seatNumber = 1;
-        seatService.registerSeat(theaterId, section, seatRow, seatNumber);
+        seatService.registerSeats(theaterId, section, seatRow, seatNumber);
 
         //then
-        then(seatRepository).should().save(any());
+        then(seatRepository).should().saveAll(any());
     }
 
     @Test
-    @DisplayName("예외: seat 단건 등록 기능 - 존재하지 않는 theater")
+    @DisplayName("예외: seat 다건 등록 기능 - 존재하지 않는 theater")
     void registerSeat_ButNoSuchTheater_Then_Exception() {
         //given
         given(theaterRepository.findById(any())).willReturn(Optional.empty());
 
         //when
         //then
-        assertThatThrownBy(() -> seatService.registerSeat(1L, 1, 1, 1))
+        assertThatThrownBy(() -> seatService.registerSeats(1L, 1, 1, 1))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
-    @DisplayName("예외: seat 단건 등록 기능 - 중복된 seat")
-    void registerSeat_ButDuplicateSeatExist_Then_Exception() {
+    @DisplayName("성공: seat 다건 등록 기능 - 중복된 seat")
+    void registerSeat_DuplicateSeatExist() {
         //given
         Seat seat = TicketingTestUtil.createSeat("theater", 1);
         Theater theater = seat.getTheater();
 
         given(theaterRepository.findById(any())).willReturn(Optional.of(theater));
-        given(seatRepository.findByTheaterAndSeatPosition(any(), any())).willReturn(Optional.of(seat));
+        given(seatRepository.findAllByTheaterAndSection(any(), anyInt())).willReturn(List.of(seat));
 
         //when
+        SeatPosition seatPosition = seat.getSeatPosition();
+        int section = seatPosition.getSection();
+        int seatRow = seatPosition.getSeatRow();
+        int seatNumber = seatPosition.getSeatNumber();
+        List<Long> seatIds = seatService.registerSeats(1L, section, seatRow, seatNumber);
+
         //then
-        assertThatThrownBy(() -> seatService.registerSeat(1L, 1, 1, 1))
-                .isInstanceOf(DuplicateKeyException.class);
+        assertThat(seatIds).isEmpty();
     }
 
     @Test
