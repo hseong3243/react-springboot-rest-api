@@ -5,10 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class ReservationCreateRequest {
     @NotNull
-    private Long showSeatId;
+    private List<Long> showSeatIds;
 
     @NotNull
     @Email
@@ -18,8 +20,8 @@ public class ReservationCreateRequest {
     public ReservationCreateRequest() {
     }
 
-    public ReservationCreateRequest(Long showSeatId, String email) {
-        this.showSeatId = showSeatId;
+    public ReservationCreateRequest(List<Long> showSeatId, String email) {
+        this.showSeatIds = showSeatId;
         this.email = email;
     }
 }

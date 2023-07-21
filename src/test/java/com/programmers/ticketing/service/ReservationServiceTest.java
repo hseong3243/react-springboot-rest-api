@@ -6,12 +6,14 @@ import com.programmers.ticketing.domain.ShowSeat;
 import com.programmers.ticketing.dto.reservation.ReservationDto;
 import com.programmers.ticketing.repository.ReservationRepository;
 import com.programmers.ticketing.repository.ShowSeatRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -40,13 +42,29 @@ class ReservationServiceTest {
         //given
         ShowSeat showSeat = TicketingTestUtil.createShowSeat();
 
-        given(showSeatRepository.findById(any())).willReturn(Optional.of(showSeat));
+        given(showSeatRepository.findAllNotReservedShowSeatByShowSeatIds(any()))
+                .willReturn(List.of(showSeat));
 
         //when
-        reservationService.createReservation(1L, "email");
+        reservationService.createReservation(List.of(1L), "email");
 
         //then
-        then(reservationRepository).should().save(any());
+        then(reservationRepository).should().saveAll(any());
+    }
+
+    @Test
+    @DisplayName("예외: reservation 생성 기능 - 중복된 showSeat")
+    void createReservation_ButDuplicateShowSeat_Then_Exception() {
+        //given
+        ShowSeat showSeat = TicketingTestUtil.createShowSeat();
+
+        given(showSeatRepository.findAllReservedShowSeatByShowSeatIds(any()))
+                .willReturn(List.of(showSeat));
+
+        //when
+        //then
+        assertThatThrownBy(() -> reservationService.createReservation(List.of(1L), "email"))
+                .isInstanceOf(DuplicateKeyException.class);
     }
 
     @Test

@@ -27,10 +27,10 @@ public class ReservationApiController {
     }
 
     @PostMapping("/reservations")
-    public ResponseEntity<Result<Long>> createReservation(@RequestBody @Valid ReservationCreateRequest request) {
-        Long reservationId = reservationService.createReservation(request.getShowSeatId(), request.getEmail());
-        URI location = URI.create("/api/v1/reservations/" + reservationId);
-        return ResponseEntity.created(location).body(new Result<>(reservationId));
+    public ResponseEntity<Result<List<Long>>> createReservation(@RequestBody @Valid ReservationCreateRequest request) {
+        List<Long> reservationIds = reservationService.createReservation(request.getShowSeatIds(), request.getEmail());
+        URI location = URI.create("/api/v1/reservations");
+        return ResponseEntity.created(location).body(new Result<>(reservationIds));
     }
 
     @GetMapping("/reservations/{reservationId}")

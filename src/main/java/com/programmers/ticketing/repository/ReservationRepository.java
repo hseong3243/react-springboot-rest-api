@@ -29,4 +29,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             " join fetch si.show" +
             " where r.reservationId = :reservationId")
     Optional<Reservation> findByIdWithOthers(@Param("reservationId") Long reservationId);
+
+    List<Reservation> findAllByShowSeatShowSeatIdIn(List<Long> showSeatIds);
 }

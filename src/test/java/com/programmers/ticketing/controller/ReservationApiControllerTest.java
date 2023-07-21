@@ -64,10 +64,10 @@ class ReservationApiControllerTest {
     @DisplayName("성공: reservation 단건 생성 요청")
     void createReservation() throws Exception {
         //given
-        ReservationCreateRequest request = new ReservationCreateRequest(1L, "email@gmail.com");
+        ReservationCreateRequest request = new ReservationCreateRequest(List.of(1L, 2L), "email@gmail.com");
         String jsonRequestPayload = mapper.writeValueAsString(request);
 
-        given(reservationService.createReservation(any(), any())).willReturn(1L);
+        given(reservationService.createReservation(any(), any())).willReturn(List.of(1L));
 
         //when
         ResultActions resultActions = mvc.perform(post("/api/v1/reservations")
@@ -79,7 +79,7 @@ class ReservationApiControllerTest {
         //then
         resultActions.andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data").isNumber());
+                .andExpect(jsonPath("$.data").isArray());
 
     }
 

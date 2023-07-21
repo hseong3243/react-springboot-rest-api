@@ -5,6 +5,7 @@ import com.programmers.ticketing.domain.ShowSeat;
 import com.programmers.ticketing.dto.reservation.ReservationDto;
 import com.programmers.ticketing.repository.ReservationRepository;
 import com.programmers.ticketing.repository.ShowSeatRepository;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,13 +23,20 @@ public class ReservationService {
     }
 
     @Transactional
-    public Long createReservation(Long showSeatId, String email) {
-        ShowSeat showSeat = showSeatRepository.findById(showSeatId)
-                .orElseThrow(() -> new NoSuchElementException("No such show seat exist"));
+    public List<Long> createReservation(List<Long> showSeatIds, String email) {
+        showSeatRepository.findAllReservedShowSeatByShowSeatIds(showSeatIds)
+                .forEach(showSeat -> {
+                    throw new DuplicateKeyException("Selected seat already reserved");
+                });
 
-        Reservation reservation = new Reservation(showSeat, email);
-        reservationRepository.save(reservation);
-        return reservation.getReservationId();
+        List<ShowSeat> notReservedShowSeats = showSeatRepository.findAllNotReservedShowSeatByShowSeatIds(showSeatIds);
+        List<Reservation> reservations = notReservedShowSeats.stream()
+                .map(showSeat -> new Reservation(showSeat, email))
+                .toList();
+        reservationRepository.saveAll(reservations);
+        return reservations.stream()
+                .map(Reservation::getReservationId)
+                .toList();
     }
 
     @Transactional(readOnly = true)
