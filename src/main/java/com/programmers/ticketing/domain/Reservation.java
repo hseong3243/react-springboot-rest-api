@@ -13,7 +13,7 @@ public class Reservation {
     private Long reservationId;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "show_seat_id", nullable = false)
+    @JoinColumn(name = "show_seat_id", nullable = false, unique = true)
     private ShowSeat showSeat;
 
     @Column(nullable = false, length = 50)
