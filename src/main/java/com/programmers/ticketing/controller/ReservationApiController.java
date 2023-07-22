@@ -21,7 +21,7 @@ public class ReservationApiController {
     }
 
     @GetMapping("/reservations")
-    public ResponseEntity<Result<List<ReservationDto>>> findReservations(@RequestParam(required = false) String email) {
+    public ResponseEntity<Result<List<ReservationDto>>> findReservations(@RequestParam("email") String email) {
         List<ReservationDto> reservations = reservationService.findReservations(email);
         return ResponseEntity.ok().body(new Result<>(reservations));
     }

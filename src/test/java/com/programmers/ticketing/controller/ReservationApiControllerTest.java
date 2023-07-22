@@ -48,6 +48,7 @@ class ReservationApiControllerTest {
 
         //when
         ResultActions resultActions = mvc.perform(get("/api/v1/reservations")
+                        .param("email", "customer@gmail.com")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print());
 
