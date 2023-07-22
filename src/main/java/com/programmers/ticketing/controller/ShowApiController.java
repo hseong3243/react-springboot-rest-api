@@ -25,7 +25,7 @@ public class ShowApiController {
 
     @GetMapping("/shows")
     public ResponseEntity<PageResult<ShowDto>> findShows(@ModelAttribute @Valid ShowsFindRequest request) {
-        Page<ShowDto> shows = showService.findShows(request.getPage(), request.getSize());
+        Page<ShowDto> shows = showService.findShows(request.getTitle(), request.getPage(), request.getSize());
         return ResponseEntity.ok().body(new PageResult<>(shows));
     }
 

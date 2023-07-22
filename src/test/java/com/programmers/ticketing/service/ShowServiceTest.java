@@ -111,10 +111,10 @@ class ShowServiceTest {
         PageRequest pageRequest = PageRequest.of(page, size);
         PageImpl<Show> showsWithPage = new PageImpl<>(shows, pageRequest, 2);
 
-        given(showRepository.findAll(pageRequest)).willReturn(showsWithPage);
+        given(showRepository.findAllByTitleContaining(any(), any())).willReturn(showsWithPage);
 
         //when
-        Page<ShowDto> result = showService.findShows(page, size);
+        Page<ShowDto> result = showService.findShows("", page, size);
 
         //then
         ShowDto showDtoA = ShowDto.from(showA);

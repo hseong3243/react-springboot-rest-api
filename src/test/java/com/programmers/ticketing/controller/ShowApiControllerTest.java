@@ -51,7 +51,7 @@ class ShowApiControllerTest {
         PageRequest pageRequest = PageRequest.of(0, 5);
         PageImpl<ShowDto> showDtosWithPage = new PageImpl<>(showDtos, pageRequest, 5);
 
-        given(showService.findShows(anyInt(), anyInt())).willReturn(showDtosWithPage);
+        given(showService.findShows(any(), anyInt(), anyInt())).willReturn(showDtosWithPage);
 
         //when
         ResultActions resultActions = mvc.perform(get("/api/v1/shows")

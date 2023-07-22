@@ -1,19 +1,20 @@
 package com.programmers.ticketing.dto.show;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Positive;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class ShowsFindRequest {
-    @Min(0)
-    private final int page;
+    private String title = "";
 
     @Min(0)
-    private final int size;
+    private int page;
 
-    public ShowsFindRequest(int page, int size) {
-        this.page = page;
-        this.size = size;
+    @Min(0)
+    private int size;
+
+    public ShowsFindRequest() {
     }
 }

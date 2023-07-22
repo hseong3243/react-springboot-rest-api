@@ -40,9 +40,9 @@ public class ShowService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ShowDto> findShows(int page, int size) {
+    public Page<ShowDto> findShows(String title, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Show> shows = showRepository.findAll(pageRequest);
+        Page<Show> shows = showRepository.findAllByTitleContaining(title, pageRequest);
         return shows.map(ShowDto::from);
     }
 
