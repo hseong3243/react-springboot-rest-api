@@ -10,6 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -100,19 +103,23 @@ class ShowServiceTest {
     @DisplayName("성공: show 목록 조회 기능")
     void findShows() {
         //given
+        int page = 0;
+        int size = 2;
         Show showA = new Show("titleA", ShowType.CONCERT, LocalTime.of(2, 30), "");
         Show showB = new Show("titleB", ShowType.CONCERT, LocalTime.of(2, 30), "");
         List<Show> shows = List.of(showA, showB);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        PageImpl<Show> showsWithPage = new PageImpl<>(shows, pageRequest, 2);
 
-        given(showRepository.findAll()).willReturn(shows);
+        given(showRepository.findAll(pageRequest)).willReturn(showsWithPage);
 
         //when
-        List<ShowDto> result = showService.findShows();
+        Page<ShowDto> result = showService.findShows(page, size);
 
         //then
         ShowDto showDtoA = ShowDto.from(showA);
         ShowDto showDtoB = ShowDto.from(showB);
-        assertThat(result).usingRecursiveFieldByFieldElementComparator()
+        assertThat(result.getContent()).usingRecursiveFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(showDtoA, showDtoB);
     }
 

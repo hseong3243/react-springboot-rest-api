@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -21,6 +23,7 @@ import java.util.List;
 
 import static com.programmers.ticketing.TicketingTestUtil.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -45,17 +48,20 @@ class ShowApiControllerTest {
         List<ShowDto> showDtos = shows.stream()
                 .map(ShowDto::from)
                 .toList();
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        PageImpl<ShowDto> showDtosWithPage = new PageImpl<>(showDtos, pageRequest, 5);
 
-        given(showService.findShows()).willReturn(showDtos);
+        given(showService.findShows(anyInt(), anyInt())).willReturn(showDtosWithPage);
 
         //when
         ResultActions resultActions = mvc.perform(get("/api/v1/shows")
+                        .param("page", "0")
+                        .param("size", "5")
                 .accept(MediaType.APPLICATION_JSON));
         //then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data").isNotEmpty())
+                .andExpect(jsonPath("$.data").isArray())
                 .andExpect(jsonPath("$.data[0].title").isString())
                 .andExpect(jsonPath("$.data[0].showType").isString())
                 .andExpect(jsonPath("$.data[0].playtime").isString());

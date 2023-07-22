@@ -3,8 +3,10 @@ package com.programmers.ticketing.controller;
 import com.programmers.ticketing.dto.show.ShowCreateRequest;
 import com.programmers.ticketing.dto.show.ShowDto;
 import com.programmers.ticketing.dto.show.ShowUpdateRequest;
+import com.programmers.ticketing.dto.show.ShowsFindRequest;
 import com.programmers.ticketing.service.ShowService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +24,9 @@ public class ShowApiController {
     }
 
     @GetMapping("/shows")
-    public ResponseEntity<Result<List<ShowDto>>> findShows() {
-        List<ShowDto> shows = showService.findShows();
-        return ResponseEntity.ok().body(new Result<>(shows));
+    public ResponseEntity<PageResult<ShowDto>> findShows(@ModelAttribute @Valid ShowsFindRequest request) {
+        Page<ShowDto> shows = showService.findShows(request.getPage(), request.getSize());
+        return ResponseEntity.ok().body(new PageResult<>(shows));
     }
 
     @PostMapping("/shows")

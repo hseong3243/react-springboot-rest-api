@@ -5,11 +5,12 @@ import com.programmers.ticketing.domain.ShowType;
 import com.programmers.ticketing.dto.show.ShowDto;
 import com.programmers.ticketing.repository.ShowRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -39,11 +40,10 @@ public class ShowService {
     }
 
     @Transactional(readOnly = true)
-    public List<ShowDto> findShows() {
-        List<Show> shows = showRepository.findAll();
-        return shows.stream()
-                .map(ShowDto::from)
-                .toList();
+    public Page<ShowDto> findShows(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Show> shows = showRepository.findAll(pageRequest);
+        return shows.map(ShowDto::from);
     }
 
     @Transactional
