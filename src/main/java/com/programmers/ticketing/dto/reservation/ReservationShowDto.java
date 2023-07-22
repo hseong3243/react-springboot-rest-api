@@ -11,14 +11,14 @@ import java.time.LocalTime;
 @Getter
 public class ReservationShowDto {
     private final String title;
-    private final LocalTime playTime;
+    private final LocalTime playtime;
     private final String description;
     private final ShowStatus showStatus;
     private final LocalDateTime startTime;
 
-    private ReservationShowDto(String title, LocalTime playTime, String description, ShowStatus showStatus, LocalDateTime startTime) {
+    private ReservationShowDto(String title, LocalTime playtime, String description, ShowStatus showStatus, LocalDateTime startTime) {
         this.title = title;
-        this.playTime = playTime;
+        this.playtime = playtime;
         this.description = description;
         this.showStatus = showStatus;
         this.startTime = startTime;
