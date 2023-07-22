@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -55,8 +56,8 @@ class ShowApiControllerTest {
 
         //when
         ResultActions resultActions = mvc.perform(get("/api/v1/shows")
-                        .param("page", "0")
-                        .param("size", "5")
+                .param("page", "0")
+                .param("size", "5")
                 .accept(MediaType.APPLICATION_JSON));
         //then
         resultActions.andDo(print())
@@ -73,11 +74,42 @@ class ShowApiControllerTest {
         //given
         ShowCreateRequest request = new ShowCreateRequest("title", ShowType.CONCERT, LocalTime.of(2, 30), "");
         String jsonRequestPayload = mapper.writeValueAsString(request);
+        MockMultipartFile requestMultipart = new MockMultipartFile(
+                "request",
+                "",
+                "application/json",
+                jsonRequestPayload.getBytes());
 
         //when
-        ResultActions resultActions = mvc.perform(post("/api/v1/shows")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequestPayload)
+        ResultActions resultActions = mvc.perform(multipart("/api/v1/shows")
+                .file(requestMultipart)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .accept(MediaType.APPLICATION_JSON));
+        //then
+        resultActions.andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.data").isNumber());
+    }
+
+    @Test
+    @DisplayName("성공: show 단건 생성 요청")
+    void registerShow_withFile() throws Exception {
+        //given
+        ShowCreateRequest request = new ShowCreateRequest("title", ShowType.CONCERT, LocalTime.of(2, 30), "");
+        String jsonRequestPayload = mapper.writeValueAsString(request);
+        MockMultipartFile file = new MockMultipartFile("file", "content".getBytes());
+        MockMultipartFile requestMultipart = new MockMultipartFile(
+                "request",
+                "",
+                "application/json",
+                jsonRequestPayload.getBytes());
+
+        //when
+        ResultActions resultActions = mvc.perform(multipart("/api/v1/shows")
+                .file(file)
+                .file(requestMultipart)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
                 .accept(MediaType.APPLICATION_JSON));
         //then
         resultActions.andDo(print())

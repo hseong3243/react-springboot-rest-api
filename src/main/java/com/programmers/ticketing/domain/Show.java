@@ -26,16 +26,19 @@ public class Show {
     @Column(length = 1000)
     private String description;
 
+    private String imagePath;
+
     public Show() {
 
     }
 
-    public Show(String title, ShowType showType, LocalTime playtime, String description) {
+    public Show(String title, ShowType showType, LocalTime playtime, String description, String imageName) {
         validateDescription(description);
         this.title = title;
         this.showType = showType;
         this.playtime = playtime;
         this.description = description;
+        this.imagePath = imageName;
     }
 
     public void update(LocalTime playtime, String description) {
@@ -56,5 +59,9 @@ public class Show {
 
     private boolean isDescriptionLengthOutOfRange(String description) {
         return description.length() > 1000;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

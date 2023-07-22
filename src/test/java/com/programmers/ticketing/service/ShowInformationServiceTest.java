@@ -44,7 +44,7 @@ class ShowInformationServiceTest {
     @DisplayName("성공: showInformation 단건 등록 기능")
     void registerShowInformation() {
         //given
-        Show show = new Show("title", ShowType.CONCERT, LocalTime.of(2, 30), "");
+        Show show = new Show("title", ShowType.CONCERT, LocalTime.of(2, 30), "", null);
         Theater theater = new Theater("theater", "address");
 
         given(showRepository.findById(any())).willReturn(Optional.of(show));
@@ -62,7 +62,7 @@ class ShowInformationServiceTest {
     @DisplayName("예외: showInformation 단건 등록 기능 - 현재보다 이전의 starTime")
     void registerShowInformation_ButStartTimeBeforeNow_Then_Exception() {
         //given
-        Show show = new Show("title", ShowType.CONCERT, LocalTime.of(2, 30), "");
+        Show show = new Show("title", ShowType.CONCERT, LocalTime.of(2, 30), "", null);
         Theater theater = new Theater("theater", "address");
 
         given(showRepository.findById(any())).willReturn(Optional.of(show));
@@ -80,7 +80,7 @@ class ShowInformationServiceTest {
     @DisplayName("성공: showInformation 단건 조회 기능")
     void findShowInformation() {
         //given
-        Show show = new Show("title", ShowType.CONCERT, LocalTime.of(2, 30), "");
+        Show show = new Show("title", ShowType.CONCERT, LocalTime.of(2, 30), "", null);
         Theater theater = new Theater("theater", "address");
         LocalDateTime startTime = LocalDateTime.now().plusYears(100);
         ShowInformation showInformation = new ShowInformation(show, theater, startTime);

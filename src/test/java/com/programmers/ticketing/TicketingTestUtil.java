@@ -20,7 +20,7 @@ public class TicketingTestUtil {
     public static List<Show> createShows(int num) {
         List<Show> shows = new ArrayList<>();
         for (int i = 0; i < num; i++) {
-            Show show = new Show("title" + i, ShowType.CONCERT, LocalTime.of(2, 30), "");
+            Show show = new Show("title" + i, ShowType.CONCERT, LocalTime.of(2, 30), "", null);
             shows.add(show);
         }
         return shows;
@@ -36,7 +36,7 @@ public class TicketingTestUtil {
     }
 
     public static Show createShow(String title) {
-        return new Show(title, ShowType.CONCERT, LocalTime.of(2, 30), "");
+        return new Show(title, ShowType.CONCERT, LocalTime.of(2, 30), "", null);
     }
 
     public static Theater createTheater(String name) {

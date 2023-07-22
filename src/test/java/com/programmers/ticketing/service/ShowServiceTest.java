@@ -44,7 +44,7 @@ class ShowServiceTest {
         String description = "";
 
         //when
-        showService.registerShow(title, showType, playtime, description);
+        showService.registerShow(title, showType, playtime, description, null);
 
         //then
         then(showRepository).should().save(any());
@@ -62,7 +62,7 @@ class ShowServiceTest {
         String description = "a".repeat(1001);
 
         //then
-        assertThatThrownBy(() -> showService.registerShow(title, showType, playtime, description))
+        assertThatThrownBy(() -> showService.registerShow(title, showType, playtime, description, null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -74,7 +74,7 @@ class ShowServiceTest {
         ShowType showType = ShowType.CONCERT;
         LocalTime playtime = LocalTime.of(2, 30);
         String description = "";
-        Show show = new Show(title, showType, playtime, description);
+        Show show = new Show(title, showType, playtime, description, null);
 
         given(showRepository.findById(any())).willReturn(Optional.of(show));
 
@@ -105,8 +105,8 @@ class ShowServiceTest {
         //given
         int page = 0;
         int size = 2;
-        Show showA = new Show("titleA", ShowType.CONCERT, LocalTime.of(2, 30), "");
-        Show showB = new Show("titleB", ShowType.CONCERT, LocalTime.of(2, 30), "");
+        Show showA = new Show("titleA", ShowType.CONCERT, LocalTime.of(2, 30), "", null);
+        Show showB = new Show("titleB", ShowType.CONCERT, LocalTime.of(2, 30), "", null);
         List<Show> shows = List.of(showA, showB);
         PageRequest pageRequest = PageRequest.of(page, size);
         PageImpl<Show> showsWithPage = new PageImpl<>(shows, pageRequest, 2);
@@ -131,8 +131,8 @@ class ShowServiceTest {
                 "title",
                 ShowType.CONCERT,
                 LocalTime.of(2, 30),
-                ""
-        );
+                "",
+                null);
 
         given(showRepository.findById(any())).willReturn(Optional.of(show));
 
@@ -154,8 +154,8 @@ class ShowServiceTest {
                 "title",
                 ShowType.CONCERT,
                 LocalTime.of(2, 30),
-                ""
-        );
+                "",
+                null);
 
         given(showRepository.findById(any())).willReturn(Optional.of(show));
 
@@ -175,8 +175,8 @@ class ShowServiceTest {
                 "title",
                 ShowType.CONCERT,
                 LocalTime.of(2, 30),
-                ""
-        );
+                "",
+                null);
 
         //when
         showRepository.delete(show);

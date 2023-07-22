@@ -21,6 +21,8 @@ public class QShow extends EntityPathBase<Show> {
 
     public final StringPath description = createString("description");
 
+    public final StringPath imagePath = createString("imagePath");
+
     public final TimePath<java.time.LocalTime> playtime = createTime("playtime", java.time.LocalTime.class);
 
     public final NumberPath<Long> showId = createNumber("showId", Long.class);
