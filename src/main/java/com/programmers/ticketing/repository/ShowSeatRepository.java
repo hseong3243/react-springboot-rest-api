@@ -29,7 +29,8 @@ public interface ShowSeatRepository extends JpaRepository<ShowSeat, Long> {
             " where ss not in" +
             " (select ss2 from Reservation r" +
             " join r.showSeat ss2" +
-            " where ss2.showSeatId in :showSeatIds)")
+            " where ss2.showSeatId in :showSeatIds)" +
+            " and ss.showSeatId in :showSeatIds")
     List<ShowSeat> findAllNotReservedShowSeatByShowSeatIds(@Param("showSeatIds") List<Long> showSeatIds);
 
     @Query("select ss from Reservation r" +

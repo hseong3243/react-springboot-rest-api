@@ -24,6 +24,8 @@ public class QShowSeat extends EntityPathBase<ShowSeat> {
 
     public final NumberPath<Integer> fee = createNumber("fee", Integer.class);
 
+    public final QReservation reservation;
+
     public final QSeat seat;
 
     public final QSeatGrade seatGrade;
@@ -50,6 +52,7 @@ public class QShowSeat extends EntityPathBase<ShowSeat> {
 
     public QShowSeat(Class<? extends ShowSeat> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.reservation = inits.isInitialized("reservation") ? new QReservation(forProperty("reservation"), inits.get("reservation")) : null;
         this.seat = inits.isInitialized("seat") ? new QSeat(forProperty("seat"), inits.get("seat")) : null;
         this.seatGrade = inits.isInitialized("seatGrade") ? new QSeatGrade(forProperty("seatGrade")) : null;
         this.showInformation = inits.isInitialized("showInformation") ? new QShowInformation(forProperty("showInformation"), inits.get("showInformation")) : null;

@@ -28,6 +28,9 @@ public class ShowSeat {
     @JoinColumn(name = "seat_grade_id", nullable = false)
     private SeatGrade seatGrade;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "showSeat")
+    private Reservation reservation;
+
     private int fee;
 
     public ShowSeat() {
