@@ -44,26 +44,6 @@ class ShowSeatServiceTest {
     private SeatRepository seatRepository;
 
     @Test
-    @DisplayName("성공: showSeat 단건 등록")
-    void registerShowSeat() {
-        //given
-        ShowSeat showSeat = TicketingTestUtil.createShowSeat();
-        ShowInformation showInformation = showSeat.getShowInformation();
-        SeatGrade seatGrade = showSeat.getSeatGrade();
-        Seat seat = showSeat.getSeat();
-
-        given(showInformationRepository.findById(any())).willReturn(Optional.ofNullable(showInformation));
-        given(seatGradeRepository.findById(any())).willReturn(Optional.ofNullable(seatGrade));
-        given(seatRepository.findById(any())).willReturn(Optional.ofNullable(seat));
-
-        //when
-        showSeatService.registerShowSeat(1L, 1L, 1L, 100);
-
-        //then
-        then(showSeatRepository).should().save(any());
-    }
-
-    @Test
     @DisplayName("성공: showSeat 다건 등록 - 다수의 seatId")
     void registerMultipleShowSeat() {
         //given
@@ -80,7 +60,7 @@ class ShowSeatServiceTest {
                 .willReturn(seats);
 
         //when
-        showSeatService.registerMultipleShowSeat(1L, 1L, List.of(1L), 100);
+        showSeatService.registerShowSeats(1L, 1L, List.of(1L), 100);
 
         //then
         then(showSeatRepository).should().saveAll(any());

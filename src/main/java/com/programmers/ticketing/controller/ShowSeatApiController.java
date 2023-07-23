@@ -27,26 +27,8 @@ public class ShowSeatApiController {
     }
 
     @PostMapping("/show-seats")
-    public ResponseEntity<Result<Long>> registerShowSeat(@RequestBody @Valid ShowSeatCreateRequest request) {
-        Long showSeatId = showSeatService.registerShowSeat(
-                request.getSeatId(),
-                request.getSeatGradeId(),
-                request.getSeatId(),
-                request.getFee()
-        );
-        URI location = URI.create("/api/v1/show-seats/" + showSeatId);
-        return ResponseEntity.created(location).body(new Result<>(showSeatId));
-    }
-
-    @GetMapping("/show-seats/{showSeatId}")
-    public ResponseEntity<Result<ShowSeatDto>> findShowSeat(@PathVariable("showSeatId") Long showSeatId) {
-        ShowSeatDto showSeat = showSeatService.findShowSeat(showSeatId);
-        return ResponseEntity.ok().body(new Result<>(showSeat));
-    }
-
-    @PostMapping("/show-seats/bulk")
     public ResponseEntity<Result<List<Long>>> registerShowSeats(@RequestBody @Valid ShowSeatBulkCreateRequest request) {
-        List<Long> showSeatIds = showSeatService.registerMultipleShowSeat(
+        List<Long> showSeatIds = showSeatService.registerShowSeats(
                 request.getShowInformationId(),
                 request.getSeatGradeId(),
                 request.getSeatIds(),
@@ -54,5 +36,11 @@ public class ShowSeatApiController {
         );
         URI location = URI.create("/api/v1/show-seats");
         return ResponseEntity.created(location).body(new Result<>(showSeatIds));
+    }
+
+    @GetMapping("/show-seats/{showSeatId}")
+    public ResponseEntity<Result<ShowSeatDto>> findShowSeat(@PathVariable("showSeatId") Long showSeatId) {
+        ShowSeatDto showSeat = showSeatService.findShowSeat(showSeatId);
+        return ResponseEntity.ok().body(new Result<>(showSeat));
     }
 }

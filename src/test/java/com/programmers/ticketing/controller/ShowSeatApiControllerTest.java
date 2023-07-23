@@ -61,27 +61,6 @@ class ShowSeatApiControllerTest {
     }
 
     @Test
-    @DisplayName("성공: showSeat 단건 생성 요청")
-    void registerShowSeat() throws Exception {
-        //given
-        ShowSeatCreateRequest request = new ShowSeatCreateRequest(1L, 1L, 1L, 100);
-        String jsonRequestPayload = mapper.writeValueAsString(request);
-
-        given(showSeatService.registerShowSeat(any(), any(), any(), anyInt())).willReturn(1L);
-
-        //when
-        ResultActions resultActions = mvc.perform(post("/api/v1/show-seats")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequestPayload)
-                .accept(MediaType.APPLICATION_JSON));
-
-        //then
-        resultActions.andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.data").isNumber());
-    }
-
-    @Test
     @DisplayName("성공: showSeat 단건 조회 요청")
     void findShowSeat() throws Exception {
         //given
@@ -110,10 +89,10 @@ class ShowSeatApiControllerTest {
         ShowSeatBulkCreateRequest request = new ShowSeatBulkCreateRequest(1L, 1L, List.of(1L, 2L), 100);
         String jsonRequestPayload = mapper.writeValueAsString(request);
 
-        given(showSeatService.registerMultipleShowSeat(any(), any(), any(), anyInt())).willReturn(List.of(1L, 2L));
+        given(showSeatService.registerShowSeats(any(), any(), any(), anyInt())).willReturn(List.of(1L, 2L));
 
         //when
-        ResultActions resultActions = mvc.perform(post("/api/v1/show-seats/bulk")
+        ResultActions resultActions = mvc.perform(post("/api/v1/show-seats")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonRequestPayload)
                 .accept(MediaType.APPLICATION_JSON));

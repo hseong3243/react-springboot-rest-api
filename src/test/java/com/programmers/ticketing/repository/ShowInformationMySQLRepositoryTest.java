@@ -2,6 +2,7 @@ package com.programmers.ticketing.repository;
 
 import com.programmers.ticketing.domain.*;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ public class ShowInformationMySQLRepositoryTest {
                 LocalTime.MIN,
                 "설명",
                 null);
-        Theater theater = new Theater("name", "address");
+        Theater theater = new Theater(showTitle, "address");
         ShowInformation showInformation = new ShowInformation(
                 show,
                 theater,

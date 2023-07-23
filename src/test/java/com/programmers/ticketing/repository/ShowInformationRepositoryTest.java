@@ -156,7 +156,7 @@ class ShowInformationRepositoryTest {
         showInformationRepository.updateShowStatusBeforeNow(
                 ShowStatus.BEFORE,
                 ShowStatus.STAGING,
-                LocalDateTime.now());
+                LocalDateTime.now().plusMinutes(1));
         em.clear();
 
         //then
@@ -172,7 +172,7 @@ class ShowInformationRepositoryTest {
                 LocalTime.MIN,
                 "설명",
                 null);
-        Theater theater = new Theater("name", "address");
+        Theater theater = new Theater(showTitle, "address");
         ShowInformation showInformation = new ShowInformation(
                 show,
                 theater,
