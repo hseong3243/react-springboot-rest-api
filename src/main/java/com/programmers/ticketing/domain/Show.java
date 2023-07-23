@@ -41,13 +41,16 @@ public class Show {
         this.imagePath = imageName;
     }
 
-    public void update(LocalTime playtime, String description) {
+    public void update(LocalTime playtime, String description, String imagePath) {
         if(playtime != null) {
             this.playtime = playtime;
         }
         if(description != null) {
             validateDescription(description);
             this.description = description;
+        }
+        if(imagePath != null) {
+            this.imagePath = imagePath;
         }
     }
 

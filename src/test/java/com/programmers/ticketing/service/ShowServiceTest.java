@@ -139,7 +139,7 @@ class ShowServiceTest {
         //when
         LocalTime updatePlaytime = LocalTime.of(2, 0);
         String updateDescription = "new description";
-        showService.updateShow(1L, updatePlaytime, updateDescription);
+        showService.updateShow(1L, updatePlaytime, updateDescription, null);
 
         //then
         assertThat(show.getPlaytime()).isEqualTo(LocalTime.of(2, 0));
@@ -163,7 +163,7 @@ class ShowServiceTest {
         String updateDescription = "a".repeat(1001);
 
         //then
-        assertThatThrownBy(() -> showService.updateShow(1L, null, updateDescription))
+        assertThatThrownBy(() -> showService.updateShow(1L, null, updateDescription, null))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

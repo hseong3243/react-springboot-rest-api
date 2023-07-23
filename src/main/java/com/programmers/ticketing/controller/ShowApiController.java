@@ -51,12 +51,16 @@ public class ShowApiController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping("/shows/{showId}")
-    public void updateShow(@PathVariable("showId") Long showId, @RequestBody @Valid ShowUpdateRequest request) {
+    @PostMapping(value = "/shows/{showId}",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public void updateShow(@PathVariable("showId") Long showId,
+                           @RequestPart("request") @Valid ShowUpdateRequest request,
+                           @RequestPart(value = "image", required = false) MultipartFile image) {
         showService.updateShow(
                 showId,
                 request.getPlaytime(),
-                request.getDescription());
+                request.getDescription(),
+                image);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)

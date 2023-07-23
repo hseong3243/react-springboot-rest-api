@@ -149,11 +149,18 @@ class ShowApiControllerTest {
         Long showId = 1L;
         ShowUpdateRequest request = new ShowUpdateRequest(LocalTime.of(2, 30), "description");
         String jsonRequestPayload = mapper.writeValueAsString(request);
+        MockMultipartFile file = new MockMultipartFile("image", "content".getBytes());
+        MockMultipartFile requestMultipart = new MockMultipartFile(
+                "request",
+                "",
+                "application/json",
+                jsonRequestPayload.getBytes());
 
         //when
-        ResultActions resultActions = mvc.perform(patch("/api/v1/shows/" + showId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonRequestPayload));
+        ResultActions resultActions = mvc.perform(multipart("/api/v1/shows/" + showId)
+                        .file(file)
+                        .file(requestMultipart)
+                .contentType(MediaType.MULTIPART_FORM_DATA));
 
         //then
         resultActions.andDo(print())

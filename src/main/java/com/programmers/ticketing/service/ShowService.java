@@ -35,12 +35,27 @@ public class ShowService {
                              String description,
                              MultipartFile imageFile) {
         String imageName = null;
-        if(imageFile != null) {
+        if (imageFile != null) {
             imageName = imageUpload(imageFile);
         }
         Show show = new Show(title, showType, playTime, description, imageName);
         showRepository.save(show);
         return show.getShowId();
+    }
+
+    @Transactional
+    public void updateShow(Long showId, LocalTime playtime, String description, MultipartFile imageFile) {
+        Show show = showRepository.findById(showId)
+                .orElseThrow(() -> {
+                    log.warn("No such Show exist - ShowId: {}", showId);
+                    return new NoSuchElementException("No such Show exist");
+                });
+
+        String imageName = null;
+        if (imageFile != null) {
+            imageName = imageUpload(imageFile);
+        }
+        show.update(playtime, description, imageName);
     }
 
     private String imageUpload(MultipartFile imageFile) {
@@ -68,16 +83,6 @@ public class ShowService {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Show> shows = showRepository.findAllByTitleContaining(title, pageRequest);
         return shows.map(ShowDto::from);
-    }
-
-    @Transactional
-    public void updateShow(Long showId, LocalTime playtime, String description) {
-        Show show = showRepository.findById(showId)
-                .orElseThrow(() -> {
-                    log.warn("No such Show exist - ShowId: {}", showId);
-                    return new NoSuchElementException("No such Show exist");
-                });
-        show.update(playtime, description);
     }
 
     @Transactional
