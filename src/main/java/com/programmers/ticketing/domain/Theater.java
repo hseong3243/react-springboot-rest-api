@@ -13,7 +13,7 @@ public class Theater {
     @GeneratedValue
     private Long theaterId;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 100, unique = true)
     private String name;
 
     @Column(nullable = false, length = 200)
