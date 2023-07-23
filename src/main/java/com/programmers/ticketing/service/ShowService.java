@@ -94,16 +94,4 @@ public class ShowService {
                 });
         showRepository.delete(show);
     }
-
-    public void addImage(Long showId, MultipartFile image) {
-        Show show = showRepository.findById(showId)
-                .orElseThrow(() -> new NoSuchElementException("No such Show exist"));
-        String imageName = null;
-        try {
-            imageName = imageRepository.uploadImage(image);
-        } catch (IOException e) {
-            throw new RuntimeException("Image upload fail");
-        }
-        show.setImagePath(imageName);
-    }
 }
