@@ -17,7 +17,7 @@ public class ShowStatusScheduler {
         this.showInformationRepository = showInformationRepository;
     }
 
-    @Scheduled(cron = "* * * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void updateShowInformationStartTimeBeforeNow() {
         showInformationRepository.updateShowStatusBeforeNow(
                 ShowStatus.BEFORE,
@@ -25,7 +25,7 @@ public class ShowStatusScheduler {
                 LocalDateTime.now());
     }
 
-    @Scheduled(cron = "* * * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void updateShowInformationEndTimeBeforeNow() {
         showInformationRepository.updateShowStatusBeforeEndTime(
                 ShowStatus.STAGING.name(),
