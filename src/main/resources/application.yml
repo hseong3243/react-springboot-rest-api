@@ -1,2 +1,12 @@
 file:
   dir: C:\Users\hseon\OneDrive\Desktop\데브코스\과제\A-Z\ticketing-front\ticketing-front\src\assets\img\
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ticketing
+    username: root
+    password: root123!
+  jpa:
+    hibernate:
+      ddl-auto: update
