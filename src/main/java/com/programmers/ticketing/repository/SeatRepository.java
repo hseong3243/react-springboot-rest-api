@@ -23,7 +23,8 @@ public interface SeatRepository extends JpaRepository<Seat, Long>, SeatRepositor
             " where s1 not in (select s2 from ShowSeat ss" +
             " join ss.seat s2" +
             " where ss.showInformation = :showInformation" +
-            " and ss.seat.seatId in :seatIds)")
+            " and ss.seat.seatId in :seatIds)" +
+            " and s1 in :seatIds")
     List<Seat> findSeatsNotExistShowSeatByShowInformationAndSeatIdsIn(@Param("showInformation") ShowInformation showInformation,
                                                                       @Param("seatIds") List<Long> seatIds);
 
