@@ -1,14 +1,13 @@
 package com.programmers.ticketing.repository;
 
 import com.programmers.ticketing.TicketingTestUtil;
-import com.programmers.ticketing.domain.Show;
-import com.programmers.ticketing.domain.ShowInformation;
-import com.programmers.ticketing.domain.ShowType;
-import com.programmers.ticketing.domain.Theater;
+import com.programmers.ticketing.domain.*;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
@@ -16,11 +15,11 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
-import static com.programmers.ticketing.TicketingTestUtil.createShow;
-import static com.programmers.ticketing.TicketingTestUtil.createTheater;
+import static com.programmers.ticketing.TicketingTestUtil.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ShowInformationRepositoryTest {
     @Autowired
     private ShowInformationRepository showInformationRepository;
@@ -30,6 +29,9 @@ class ShowInformationRepositoryTest {
 
     @Autowired
     private TheaterRepository theaterRepository;
+
+    @Autowired
+    private EntityManager em;
 
     @BeforeEach
     void init() {
@@ -144,29 +146,40 @@ class ShowInformationRepositoryTest {
     }
 
     @Test
-    @DisplayName("성공: showInformation 목록 조회 - startTime")
-    void findShowInformations_ByStartTime() {
+    @DisplayName("성공: showInformation 상태 업데이트 - 시작시간이 현재보다 이전인 showInformation")
+    void updateShowStatusBeforeNow() {
         //given
-        Show show = createShow("titleA");
-        showRepository.save(show);
-        Theater theater = createTheater("nameA");
-        theaterRepository.save(theater);
-
-        LocalDateTime startTimeA = LocalDateTime.now().plusHours(2);
-        ShowInformation showInformationA = new ShowInformation(show, theater, startTimeA);
-        ShowInformation showInformationB = new ShowInformation(show, theater, startTimeA);
-        showInformationRepository.save(showInformationA);
-        showInformationRepository.save(showInformationB);
-
-        LocalDateTime startTimeB = LocalDateTime.now().plusHours(1);
-        ShowInformation showInformationC = new ShowInformation(show, theater, startTimeB);
-        showInformationRepository.save(showInformationC);
+        ShowInformation target = createAndSaveForShowInformation("titleA", LocalDateTime.now());
+        ShowInformation noneTarget = createAndSaveForShowInformation("titleB", LocalDateTime.now().plusHours(1));
 
         //when
-        List<ShowInformation> showInformations =
-                showInformationRepository.findShowInformations(null, null, startTimeA.minusMinutes(1));
+        showInformationRepository.updateShowStatusBeforeNow(
+                ShowStatus.BEFORE,
+                ShowStatus.STAGING,
+                LocalDateTime.now());
+        em.clear();
 
         //then
-        assertThat(showInformations.size()).isEqualTo(2);
+        List<ShowInformation> result = showInformationRepository.findAll();
+        List<ShowStatus> showStatuses = result.stream().map(ShowInformation::getShowStatus).toList();
+        assertThat(showStatuses).containsExactlyInAnyOrder(ShowStatus.BEFORE, ShowStatus.STAGING);
+    }
+
+    private ShowInformation createAndSaveForShowInformation(String showTitle, LocalDateTime startTime) {
+        Show show = new Show(
+                showTitle,
+                ShowType.MUSICAL,
+                LocalTime.MIN,
+                "설명",
+                null);
+        Theater theater = new Theater("name", "address");
+        ShowInformation showInformation = new ShowInformation(
+                show,
+                theater,
+                startTime.plusSeconds(1));
+        showRepository.save(show);
+        theaterRepository.save(theater);
+        showInformationRepository.save(showInformation);
+        return showInformation;
     }
 }
